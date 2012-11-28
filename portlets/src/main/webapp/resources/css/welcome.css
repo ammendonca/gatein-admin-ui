@@ -1,0 +1,486 @@
+/* To avoid responsivness */
+
+.container, 
+.navbar-fixed-top .container, 
+.navbar-fixed-bottom .container,
+footer {width: 1170px;}
+
+
+/* General styles */
+
+[class^="icon-30"], 
+[class*=" icon-30"] {
+    background-image: url("#{resource['/img/sprite-icons-30.png']}");
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+ul {margin-left: 0;}
+
+li {list-style: none;}
+
+.icon-30-plus {background-position: 0 0;}
+.icon-30-keychain {background-position: -30px 0;}
+.icon-30-magic-wand {background-position: -60px 0;}
+
+h1 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+a#logo {
+	background-image: url(#{resource['/img/welcome-logo.png']});
+	width: 168px;
+	height: 44px;
+	margin-top: 20px;
+}
+
+#wrapper {
+	border-radius: 10px;
+	background-color: #fff;
+	margin-top: 18px;
+	box-shadow: 0px 0 5px rgba(0,0,0,0.2);
+	padding-bottom: 30px;
+}
+
+#masthead {
+	padding: 0 30px;
+	background: #003971 url(#{resource['/img/welcome-masthead-bg.jpg']}) repeat-x left top;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#005f99', endColorstr='#001e54',GradientType=0 ); /* IE6-9 */
+	-webkit-border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	border-radius: 10px 10px 0 0;
+	text-align: center;
+}
+
+hgroup {text-align: center;}
+
+h2 {
+	font-size: 48px;
+	color: #fff;
+	text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+	background: url(#{resource['/img/welcome-masthead-border.png']}) no-repeat center 1px;
+	padding-top: 60px;
+	font-weight: normal;
+}
+
+#made {
+	color: #b2c6db;
+	font-weight: 100;
+	font-size: 24px;
+	font-family: "Helvetica Neue", Helvetica,Arial,sans-serif;
+	margin-top: 20px;
+	letter-spacing: 1.5px;
+}
+
+#made a,
+#made a:hover {color: #f6ad3c;}
+
+#made a:hover {background-color: rgba(178,198,219,0.075);
+	text-decoration: none;
+	border-radius: 3px;
+}
+
+#buttons {
+	margin-top: 35px;
+	color: #b2c6db;
+	font-size: 24px;
+	font-weight: 100;
+	margin-bottom: 0;
+	background: url(#{resource['/img/welcome-masthead-border.png']}) no-repeat center bottom;
+	padding-bottom: 60px;
+
+}
+
+#buttons a {
+	font-family: Ubuntu;
+	color: #fff;
+	display: inline-block;
+	line-height: 60px;
+	padding: 0 30px;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.75);
+	background: #bb5e02;
+	background: -moz-linear-gradient(#db8e01, #9c2f04); /* FF3.6+ */
+	background: -webkit-linear-gradient(#db8e01, #9c2f04); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(#db8e01, #9c2f04); /* Opera 11.10+ */
+	background: -ms-linear-gradient(#db8e01, #9c2f04); /* IE10+ */
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	-webkit-box-shadow: inset 0px 2px 2px rgba(0,0,0,0.6), 0px 2px 2px rgba(255,255,255,0.30);
+	box-shadow: inset 0px 2px 2px rgba(0,0,0,0.6), 0px 2px 2px rgba(255,255,255,0.30);
+}
+
+#buttons a:hover {
+	text-decoration: none;
+	background: #d46903;
+	background: -moz-linear-gradient(#f29d01, #b73705);
+	background: -webkit-linear-gradient(#f29d01, #b73705);
+	background: -o-linear-gradient(#f29d01, #b73705);
+	background: -ms-linear-gradient(#f29d01, #b73705);
+}
+
+#buttons a#demo-site {
+	background: #00417b;
+	background: -moz-linear-gradient(#005692, #002d65);
+	background: -webkit-linear-gradient(#005692, #002d65); 
+	background: -o-linear-gradient(#005692, #002d65);
+	background: -ms-linear-gradient(#005692, #002d65);
+	-webkit-box-shadow: inset 0px 2px 2px rgba(0,0,0,0.5), 0px 2px 2px rgba(255,255,255,0.20);
+	box-shadow: inset 0px 2px 2px rgba(0,0,0,0.5), 0px 2px 2px rgba(255,255,255,0.20);
+}
+
+#buttons a#demo-site:hover {
+	background: #004584;
+	background: -moz-linear-gradient(#005d9d, #00316e);
+	background: -webkit-linear-gradient(#005d9d, #00316e); 
+	background: -o-linear-gradient(#005d9d, #00316e);
+	background: -ms-linear-gradient(#005d9d, #00316e);
+}
+
+#buttons span {
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+	letter-spacing: 1.5px;
+}
+
+#why {
+	background: url(#{resource['/img/welcome-masthead-shadow.png']}) no-repeat center top;
+	padding: 48px 30px 20px 30px;
+	position: relative;
+	margin-bottom: 30px;
+}
+
+h3 {
+	font-size: 36px;
+	font-weight: normal;
+}
+
+.paddle-nav a {
+	display: block;
+	width: 23px;
+	height: 37px;
+	text-indent: -999999px;
+	background: url(#{resource['/img/welcome-paddle-nav.png']}) no-repeat;
+	position: absolute;
+	top: 160px;
+}
+
+.paddle-nav #prev a {
+	background-position: left top;
+	left: 30px;
+}
+
+.paddle-nav #prev a:hover {background-position: left bottom;}
+
+.paddle-nav #next a {
+	background-position: right top;
+	right: 30px;
+}
+
+.paddle-nav #next a:hover {background-position: right bottom;}
+
+.dot-nav {
+	background: url(#{resource['/img/welcome-why-border.png']}) no-repeat center center;
+	width: 100%;
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.dot-nav a {
+	display: block;
+	width: 10px;
+	height: 10px;
+	text-indent: -99999px;
+	background: url(#{resource['/img/welcome-dot.png']}) no-repeat right top;
+}
+
+.dot-nav .active a {background-position: left top;}
+
+.dot-nav ul {
+	height: 10px;
+	margin: 0 auto;
+}
+
+.dot-nav li {
+	display: inline-block;
+	margin: 0 2px;
+}
+
+#carousel {
+	width: 1005px;
+	margin-left: 53px;
+}
+
+#carousel section {
+	float: left;
+}
+
+#carousel section.preview {
+	height: 135px;
+	width: 210px;
+	margin-top: 60px;
+}
+
+#carousel section.expanded {
+	width: 505px;
+	height: 210px   ;
+	margin-left: 40px;
+	margin-right: 40px;
+}
+
+#carousel section.preview h5 {
+	font-size: 15px;
+	margin-bottom: 10px;
+	color: #909090;
+}
+
+#carousel section.preview i {
+	float: left;
+	margin-right: 10px;
+	margin-top: 3px;
+	margin-bottom: 15px;
+}
+
+#carousel section.preview p {
+	color: #909090;
+	font-size: 14px;
+}
+
+#carousel section.expanded img {
+	float: left;
+	margin-right: 30px;
+	width: 260px;
+}
+
+#carousel section.expanded h5 {
+	float: right;
+	width: 215px;
+	font-size: 20px;
+	margin-bottom: 15px;
+	margin-top: 20px;
+}
+
+#carousel section.expanded p {
+	font-size: 16px;
+	line-height: 1.3em;
+}
+
+#carousel section.expanded .btn {
+	margin-top: 15px;
+	font-size: 14px;
+	line-height: 19px;
+}
+
+#carousel section.expanded .btn i {
+	margin-top: 1px;
+	margin-right: 5px;
+}
+
+#why > a {
+	float: right;
+	clear: both;
+	margin-top: -35px;
+	font-size: 14px;
+}
+
+#willing,
+#documentation {
+	width: 540px;
+	float: left;
+	margin-left: 30px;
+}
+
+#conversation {
+	width: 540px;
+	float: right;
+	margin-right: 30px;
+	margin-left: 30px;	
+}
+
+h4 {
+	font-family: Ubuntu;
+	font-size: 24px;
+	font-weight: normal;
+	margin-bottom: 20px;
+}
+
+#willing p {
+	font-size: 16px;
+	line-height: 1.3em;
+	margin-bottom: 15px;
+}
+
+#willing div span {
+	display: inline-block;
+	color: #999;
+	margin: 0 5px;
+}
+
+#willing a:last-child {
+	display: inline-block;
+	padding-top: 4px;
+}
+
+#documentation {
+	margin-top: 30px;
+	background-color: #e5eef4;
+	border-radius: 10px;
+	padding: 20px;
+	width: 500px;
+}
+
+#documentation i {
+	width: 73px;
+	height: 58px;
+	background: url(#{resource['/img/welcome-book.png']}) no-repeat left top;
+	display: block;
+	float: left;
+}
+
+#documentation h4 {
+	float: right;
+	width: 415px;
+}
+
+#documentation h4 {
+	color: #505050;
+	text-shadow: 0 2px 0 #fff;
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+#documentation p {
+	color: #7a7a7a;
+	text-shadow: 0 1px 0 #fff;
+	font-size: 14px;
+	float: left;
+	width: 270px;
+	margin-left: 13px;
+	margin-bottom: 0;
+}
+
+#documentation a {
+	float: right;
+	margin-top: 8px;
+}
+
+#conversation h4 {
+	margin-bottom: 23px;
+}
+
+#conversation nav {
+	width: 150px;
+	margin-right: 10px;
+	float: left;
+	background: url(#{resource['/img/welcome-conversation-border.png']}) repeat-y right top;
+}
+
+#conversation nav a {
+	display: block;
+	font-size: 14px;
+	color: #666;
+	line-height: 30px;
+	padding-left: 10px;
+}
+
+#conversation nav a:hover {
+	text-decoration: none;
+	color: #383838;
+}
+
+#conversation nav a i {
+	margin-right: 5px;
+	margin-top: 2px;
+	visibility: hidden;
+}
+
+#conversation nav .active a {
+	border: 1px solid #ccc;
+	border-radius: 5px 2px 2px 5px;
+	font-weight: bold;
+	color: #333;
+	border-right-color: #fff;
+}
+
+#conversation nav .active i,
+#conversation nav a:hover i {visibility: visible;}
+
+#conversation nav .active i {background-image: url(#{resource['/img/glyphicons-halflings.png']});}
+
+#conversation > div {
+	border-top: 1px solid #ccc;
+	float: right;
+	width: 380px;
+}
+
+#conversation div ul {margin-bottom: 10px;}
+
+#conversation div li {
+	border-bottom: 1px solid #ccc;
+	padding: 10px 0 10px 3px;
+}
+
+h6 {
+	float: left;
+    font-size: 14px;
+    font-weight: normal;
+    max-width: 275px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+    margin-right: 4px;
+}
+
+#conversation li span {
+	color: #999;
+	font-size: 12px;
+	display: inline-block;
+	line-height: 20px;
+}
+
+#conversation li span a {color: #666;}
+
+#conversation .info {margin-top: 2px;}
+
+#conversation .info span {margin-right: 5px;}
+
+#conversation .info span + span {
+	background: url(#{resource['/img/bullet-separator.png']}) no-repeat left center;
+	padding-left: 7px;
+}
+
+#conversation > div > a {float: right;}
+
+footer {margin-top: 20px;}
+
+footer p {margin-left: 30px;}
+
+footer li:hover i.caret {
+	opacity: 1;
+	border-bottom-color: #1C5182;
+	text-decoration: underline;
+}
+
+footer li .dropdown-menu {
+	right: 20px;
+	left: auto;
+	margin-bottom: 5px;
+}
+
+footer li .dropdown-menu:after {
+	border-top: 6px solid #FFFFFF;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;
+    right: 10px;
+    position: absolute;
+    bottom: -6px;	
+}

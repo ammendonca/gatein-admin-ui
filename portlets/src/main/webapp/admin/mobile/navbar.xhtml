@@ -1,0 +1,33 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap"
+			 xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<div>
+		<h:form>
+			<b:navbar collapsible="true">
+				<f:facet name="brand">
+					<img src="#{facesContext.externalContext.requestContextPath}/resources/img/gatein_logo_grey.png" alt="GateIn Logo" id="logo" class="brand" />
+					<h:link outcome="/admin/mobile/index.xhtml" value="Administration" styleClass="brand"/>
+				</f:facet>
+				
+					<b:menuFacet label="Sites">
+						<c:forEach items="#{mr.sites}" var="s">
+							<h:commandLink action="${mr.setSiteName(s.name)}" ajax="true">
+								<b:icon value="globe" color="grey" /> ${s.name}
+							</h:commandLink>
+						</c:forEach>
+					</b:menuFacet>
+		
+				<b:menuFacet label="Spaces">
+					<h:link outcome="/admin/mobile/index.xhtml" value="Users Space"/>
+					<h:link outcome="/admin/mobile/index.xhtml" value="Hidden Space"/>
+				</b:menuFacet>
+		
+				<h:link outcome="/admin/mobile/index.xhtml" value="Dashboard"/>
+			</b:navbar>
+		</h:form>
+	</div>
+</ui:fragment>
