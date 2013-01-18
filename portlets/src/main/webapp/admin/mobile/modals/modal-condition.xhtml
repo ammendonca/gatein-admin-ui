@@ -1,0 +1,235 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:a4j="http://richfaces.org/a4j"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:form id="condition_form">
+	<div class="modal confirmation hide" id="modal-condition">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">Close</button>
+			<h3>Add Condition</h3>
+		</div>
+		<div class="modal-body">
+			<p class="subtitle">All fields are required</p>
+			<div class="control-group">
+				<label class="control-label" for="name2">Condition Name </label>
+				<input type="text" class="input-large" id="name2" value="#{rdrEdit.editedCondition.name}" />
+			</div><!-- End .control-group -->
+			<div class="control-group">
+				<table class="table table-striped" id="condition-string">
+					<thead>
+						<tr>
+							<th>User Agent String</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<label>Contains</label>
+								<ui:param name="isContainsEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.contains == null or rdrEdit.editedCondition.userAgentConditions.contains.size() == 0}" />
+								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.contains}" var="rcUACcont" varStatus="counter">
+									<div class="#{counter.index > 0 ? 'more-condition' : 'condition'}">
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<h:inputText id="rcuaccont_#{counter.index}" value="#{rcUACcont}" />
+										<div class="action">
+											<button onclick="removeUAString(this);" class="tooltipTrigger" data-original-title="Delete Condition"><i class="icon-trash">Delete User Agent Condition</i></button>
+											<!-- <b:commandButton onclick="addUAString(this);" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></b:commandButton> -->
+											<button onclick="addUAString(this);" class="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></button>
+										</div>
+									</div>
+								</ui:repeat>
+								<div class="#{isContainsEmpty ? 'condition' : 'more-condition'}">
+									<h:panelGroup styleClass="td-condition" rendered="#{not isContainsEmpty}">OR</h:panelGroup>
+									<h:inputText />
+									<div class="action">
+										<button onclick="removeUAString(this);" class="tooltipTrigger" data-original-title="Delete Condition"><i class="icon-trash">Delete User Agent Condition</i></button>
+										<button onclick="addUAString(this);" class="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label>Does not contain</label>
+								<ui:param name="isDoesNotContainEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain.size() == 0}" />
+								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain}" var="rcUACdncont" varStatus="counter">
+									<div class="#{counter.index == 0 ? 'condition' : 'more-condition'}">
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<h:inputText id="rcuacdncont_#{counter.index}" value="#{rcUACdncont}" />
+										<div class="action">
+											<button onclick="removeUAString(this);" class="tooltipTrigger" data-original-title="Delete Condition"><i class="icon-trash">Delete User Agent Condition</i></button>
+											<!-- <b:commandButton onclick="addUAString(this);" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></b:commandButton> -->
+											<button onclick="addUAString(this);" class="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></button>
+										</div>
+									</div>
+								</ui:repeat>
+								<div class="#{isDoesNotContainEmpty ? 'condition' : 'more-condition'}">
+									<h:panelGroup styleClass="td-condition" rendered="#{not isDoesNotContainEmpty}">OR</h:panelGroup>
+									<h:inputText />
+									<div class="action">
+										<button onclick="removeUAString(this);" class="tooltipTrigger" data-original-title="Delete Condition"><i class="icon-trash">Delete User Agent Condition</i></button>
+										<button onclick="addUAString(this);" class="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></button>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div><!-- End .control-group -->
+
+			<div class="control-group">
+				<h:panelGroup rendered="#{rdrEdit.editedCondition.deviceProperties == null}">
+				<a onclick="$(this).fadeOut(300, function(){$('#condition-properties').fadeIn(300);})" class="btn btn-mini pull-right">Add Properties</a>
+				</h:panelGroup>
+				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}">
+					<thead>
+						<tr>
+							<th>Property</th>
+							<th class="hidden-element actions">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ui:repeat value="#{rdrEdit.editedCondition.deviceProperties}" var="rcDevProp" varStatus="counter">
+						<tr>
+							<td class="condition" colspan="2">
+								<ui:param name="rcDevPropOp" value="#{rcDevProp.equals != null ?  'eq' : rcDevProp.greaterThan != null ? (rcDevProp.lessThan != null ? 'bt' : 'gt') : rcDevProp.lessThan != null ? 'lt' : 'mt'}" />
+								<h:inputText id="name-rcDevProp_#{counter.index}" styleClass="property" value="#{rcDevProp.propertyName}" />
+								<h:selectOneMenu id="op-rcDevProp_#{counter.index}" styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);" value="#{rcDevPropOp}">
+									<f:selectItem id="eq" itemLabel="Equals" itemValue="eq" />
+									<f:selectItem id="gt" itemLabel="Greater than" itemValue="gt" />
+									<f:selectItem id="lt" itemLabel="Less than" itemValue="lt" />
+									<f:selectItem id="bt" itemLabel="Between" itemValue="bt" />
+									<f:selectItem id="mt" itemLabel="Matches" itemValue="mt" />
+								</h:selectOneMenu>
+								<span id="value-holder">
+									<h:panelGroup rendered="#{rcDevPropOp == 'bt'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_#{counter.index}_gt" value="#{rcDevProp.greaterThan}" />
+										</div>
+										<span class="td-condition">AND</span>
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_#{counter.index}_lt" value="#{rcDevProp.lessThan}" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{rcDevPropOp == 'eq' or rcDevPropOp == 'mt'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_#{counter.index}_eq_mt" style="width: 128px;" value="#{rcDevProp.equals != null ? rcDevProp.equals : rcDevProp.matches}" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{rcDevPropOp == 'lt' or rcDevPropOp == 'gt'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_#{counter.index}_lt_gt" value="#{rcDevProp.greaterThan != null ? rcDevProp.greaterThan : rcDevProp.lessThan}" />
+										</div>
+									</h:panelGroup>
+								</span>
+							</td>
+							<td class="actions" style="width: 50px;" >
+								<a href="#" class="add-property tooltipTrigger" title="Add Property" onclick="addProperty(this);"><i class="icon-plus-sign">Add Property</i></a>
+								<a href="#" class="tooltipTrigger" title="Delete Property" onclick="removeProperty(this);"><i class="icon-trash">Delete</i></a>
+							</td>
+						</tr>
+						</ui:repeat>
+						<h:panelGroup rendered="#{rdrEdit.editedCondition.deviceProperties == null}">
+						<tr>
+							<td class="condition" colspan="2">
+								<h:inputText styleClass="property" />
+								<h:selectOneMenu styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);">
+									<f:selectItem id="eq" itemLabel="Equals" itemValue="eq" />
+									<f:selectItem id="gt" itemLabel="Greater than" itemValue="gt" />
+									<f:selectItem id="lt" itemLabel="Less than" itemValue="lt" />
+									<f:selectItem id="bt" itemLabel="Between" itemValue="bt" />
+									<f:selectItem id="mt" itemLabel="Matches" itemValue="mt" />
+								</h:selectOneMenu>
+								<span id="value-holder">
+									<div class="input-append-inline">
+										<h:inputText style="width: 128px;" />
+									</div>
+								</span>
+							</td>
+							<td class="actions" style="width: 50px;" >
+								<a href="#" class="add-property tooltipTrigger" title="Add Property" onclick="addProperty(this);"><i class="icon-plus-sign">Add Property</i></a>
+								<a href="#" class="tooltipTrigger" title="Delete Property" onclick="removeProperty(this);"><i class="icon-trash">Delete</i></a>
+							</td>
+						</tr>
+						</h:panelGroup>
+					</tbody>
+				</table>
+			</div><!-- End .control-group -->
+		</div><!-- End .modal-body -->
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
+			<a href="#" class="btn btn-primary disabled">Save Condition</a>
+		</div>
+	</div><!-- end .modal -->
+	</h:form>
+
+
+
+	<!-- Hold templates for different elements -->
+	<div id="templates-holder" style="display: none;">
+		<!-- template for greater than and less than values -->
+		<div class="tt-gt tt-lt">
+			<div class="input-append-inline">
+				<input type="text" />
+			</div>
+		</div>
+		<!-- template for equals and matches values -->
+		<div class="tt-eq tt-mt">
+			<div class="input-append-inline">
+				<input type="text" style="width: 128px;" />
+			</div>
+		</div>
+		<!-- template for between values -->
+		<div class="tt-bt">
+			<div class="input-append-inline">
+				<input type="text" />
+			</div>
+			<span class="td-condition">AND</span>
+			<div class="input-append-inline">
+				<input type="text" />
+			</div>
+		</div>
+		<!-- template for user agent lines -->
+		<div class="tt-ua">
+			<div class="more-condition">
+				<span class="td-condition">OR</span>
+				<input type="text" />
+				<div class="action">
+					<button onclick="removeUAString(this);" class="tooltipTrigger" title="Delete Condition"><i class="icon-trash">Delete User Agent Condition</i></button>
+					<button onclick="addUAString(this);" class="add-user-agent-string tooltipTrigger" title="Add Condition"><i class="icon-plus-sign">Add User Agent Condition</i></button>
+				</div>
+			</div>
+		</div>
+		<!-- template for properties -->
+		<table>
+			<tbody class="tt-pp">
+				<tr class="more-property">
+					<td colspan="2">
+						<span class="td-condition">AND</span>
+						<input type="text" class="property" />
+						<select onchange="propertyFields(this);" class="attribute">
+							<option value="eq" selected="true">Equals</option>
+							<option value="gt">Greater than</option>
+							<option value="lt">Less than</option>
+							<option value="bt">Between</option>
+							<option value="mt">Matches</option>
+						</select>
+						<span id="value-holder">
+							<div class="input-append-inline">
+								<input type="text" style="width: 128px;" />
+							</div>
+						</span>
+					</td>
+					<td class="actions" style="width: 50px;" >
+						<a href="#" class="add-property tooltipTrigger" title="Add Property" onclick="addProperty(this);"><i class="icon-plus-sign">Add Property</i></a>
+						<a href="#" class="tooltipTrigger" title="Delete Property" onclick="removeProperty(this);"><i class="icon-trash">Delete</i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</ui:fragment>
