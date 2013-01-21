@@ -10,17 +10,17 @@
 		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />
 	</h:head>
 
-	<h:body>
+	<h:body style="background: url('#{resource['/img/body-bg.jpg']}') repeat left top">
 		<h:outputStylesheet library="css" name="bootstrap.css" target="head" />
 		<h:outputStylesheet library="css" name="bootstrap-responsive.css" target="head" />
-		<h:outputStylesheet library="css" name="admin.css" target="head" />
 		<h:outputStylesheet library="css" name="admin-responsive.css" target="head" />
+		<h:outputStylesheet library="css" name="admin.css" target="head" />
 
 		<!-- Fonts -->
-		<h:outputStylesheet library="font-awesome" name="css/font-awesome.css" target="head" />
+		<!--h:outputStylesheet library="font-awesome" name="css/font-awesome.css" target="head" /-->
 
 		<!-- JS -->
-		<h:outputScript library="js" name="jquery-1.8.3.js" />
+		<!--h:outputScript library="js" name="jquery-1.8.3.js" /-->
 		<h:outputScript library="js" name="bootstrap.js" />
 		<h:outputScript library="js" name="bootstrap-dropdown.js" />
 		<h:outputScript library="js" name="bootstrap-tooltip.js" />
@@ -32,14 +32,23 @@
 
 		<ui:insert name="params" />
 
-		<ui:include src="/admin/mobile/navbar.xhtml"/>
+		<ui:include src="/admin/mobile/navbar.xhtml" />
 		
 		<b:gridContainer fluid="#{sessionBean.fluid}">
 			<b:gridRow styleClass="show-grid" fluid="#{sessionBean.fluid}">
 				<b:gridColumn span="3"><ui:include src="/admin/mobile/menu.xhtml"/></b:gridColumn>
-				<b:gridColumn id="container-right" span="9"><ui:insert name="content">Content</ui:insert></b:gridColumn>
+				<!--b:gridColumn span="3"><ui:include src="/admin/mobile/sandbox.xhtml"/></b:gridColumn-->
+				<!--b:gridColumn styleClass="container-right" id="container-right" span="9"><ui:insert name="content">Content</ui:insert></b:gridColumn-->
+				<div id="container-right" class="span9"><ui:insert name="content">Content</ui:insert></div>
+				<div id="container-right-bg"></div>
 			</b:gridRow>
+			<footer class="clearfix">
+				<p>Copyright © 2012. All rights reserved, <a href="http://www.redhat.com/">Red Hat, Inc</a> and <a href="http://www.exoplatform.com">eXo Platform SAS</a></p>
+				<ul>
+					<li><a href="http://www.jboss.org/gatein/">GateIn Site</a></li>
+					<li><a href="#">Contact Us</a></li>
+				</ul>
+			</footer>
 		</b:gridContainer>
-
 	</h:body>
 </html>

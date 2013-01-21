@@ -4,8 +4,7 @@
 			 xmlns:ui="http://java.sun.com/jsf/facelets"
 			 xmlns:rich="http://richfaces.org/rich"
 			 xmlns:a4j="http://richfaces.org/a4j"
-			 xmlns:b="http://richfaces.org/sandbox/bootstrap"
-			 xmlns:c="http://java.sun.com/jsp/jstl/core">
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
 	<h:form id="menu_form">
 		<nav id="local-nav">
@@ -16,23 +15,28 @@
 						<span class="more">Show more</span>
 					</div>
 					<ul>
-						<c:forEach items="#{mr.sites}" var="s">
-							<c:set var="activeSite" value="${mr.siteName == s.name}"/>
-							<li class="${activeSite ? 'active' : ''}">
-								<h:commandLink action="${mr.setSiteName(s.name)}" ajax="true">
-									<b:icon value="globe" color="grey" /> ${s.name}
+						<ui:repeat value="#{mr.sites}" var="s">
+							<li class="dropdown #{mr.siteName == s.name ? 'active' : ''}">
+								<h:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" >
+									<f:ajax event="action" render="@form :sum_form" />
+									<b:icon value="globe" color="grey" /> #{s.name}
 								</h:commandLink>
-								<ui:fragment rendered="#{activeSite}">
-									<ul>
+								<ui:fragment rendered="#{mr.siteName == s.name}">
+									<ul styleClass="sub-items">
 										<li><a href="#">Configuration</a></li>
 										<li><a href="#">Layout</a></li>
 										<li><a href="#">Pages and Navigation</a></li>
 										<li class="active"><a href="#">Mobile Redirects</a></li>
 									</ul>
 								</ui:fragment>
+                                <span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Export Site</a></li>
+                                    <li class="delete-site separator"><a href="#">Delete Site</a></li>
+                                </ul>
 							</li>
-						</c:forEach>
-						<c:if test="#{mr.siteName == 'Olympicz Site'}">
+						</ui:repeat>
+						<h:panelGroup rendered="#{mr.siteName == 'Olympicz Site'}">
 						<li class="active">
 							<a href="#"><i class="icon-globe icon-gray"></i> Olympics Site</a>
 							<ul>
@@ -42,12 +46,12 @@
 								<li class="active"><a href="#">Mobile Redirects</a></li>
 							</ul>
 						</li>
-						</c:if>
-						<c:if test="#{mr.siteName != 'Olympicz Site'}">
+						</h:panelGroup>
+						<h:panelGroup rendered="#{mr.siteName != 'Olympicz Site'}">
 						<li>
 							<a href="#"><i class="icon-globe icon-gray"></i> Olympics Site</a>
 						</li>
-						</c:if>
+						</h:panelGroup>
 						<li><a href="#"><i class="icon-globe icon-gray"></i> Demo Site *</a></li>
 						<li><a href="#"><i class="icon-globe icon-gray"></i> Third Site *</a></li>
 						<li class="extra hidden-element"><a href="#"><i class="icon-globe icon-gray"></i> Fourth Site *</a></li>
@@ -73,6 +77,7 @@
 						<li><a href="#"><i class="icon-briefcase icon-gray"></i> Applications</a></li>
 						<li><a href="#"><i class="icon-wrench icon-gray"></i> Services</a></li>
 						<li><a href="#"><i class="icon-align-justify icon-gray"></i> WSRP</a></li>
+						<li><a href="#" class="import-site" id="import-site"><i class="icon-download-alt icon-gray"></i> Import Site</a></li>
 					</ul>
 				</li> <!-- Server Admin List / end -->
 			</ul>

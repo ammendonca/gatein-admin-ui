@@ -24,6 +24,7 @@ package org.gatein.admin.mobile.beans.configuration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -33,10 +34,11 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
-import org.gatein.api.PortalRequest;
-import org.gatein.api.portal.site.Site;
-import org.gatein.api.portal.site.SiteQuery;
-import org.gatein.api.portal.site.SiteType;
+import org.gatein.admin.mobile.mocks.Site;
+//import org.gatein.api.PortalRequest;
+//import org.gatein.api.portal.site.Site;
+//import org.gatein.api.portal.site.SiteQuery;
+//import org.gatein.api.portal.site.SiteType;
 
 @ManagedBean(name = "mr")
 @ViewScoped
@@ -54,6 +56,18 @@ public class MobileRedirectBean implements Serializable {
 	public void setSiteName(String siteName) {
 		// System.out.println("Setting Site Name: '" + siteName + "'");
 		this.siteName = siteName;
+	}
+
+	private String redirectName = null;
+
+	public String getRedirectName() {
+		System.out.println("Getting Redirect Name: '" + redirectName + "'");
+		return siteName;
+	}
+
+	public void setRedirectName(String redirectName) {
+		System.out.println("Setting Redirect Name: '" + redirectName + "'");
+		this.redirectName = redirectName;
 	}
 
 	public ArrayList<PortalRedirect> getRedirects() {
@@ -79,12 +93,53 @@ public class MobileRedirectBean implements Serializable {
 		return r;
 	}
 
-	// TODO: Move this to an API bean
+	public PortalRedirect getRedirect(String site, String redirect) {
+		// System.out.println("Getting Specific Redirect.. Site[" + site + "] Redirect[" + redirect + "]");
+		setSiteName(site);
+		setRedirectName(redirect);
+		return getRedirect();
+	}
+
+	public PortalRedirect getRedirect() {
+		// System.out.println("Getting Redirects for Portal '" + siteName + "'");
+
+		if(redirectName == null)
+			return null;
+
+		// FIXME: Use webui Util.getUIPortal();
+		DataStorage ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
+
+		try {
+			// System.out.println("Portal Names: " + ds.getAllPortalNames());
+			PortalConfig cfg = ds.getPortalConfig(siteName);
+			for (PortalRedirect pr : cfg.getPortalRedirects()) {
+				if (pr.getName().equals(redirectName)) {
+					return pr;
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// System.out.println("Returning " + (r != null ? r.size() : "N/A") + " Redirects.");
+		return null;
+	}
+
+//	// TODO: Move this to an API bean
+//	public List<Site> getSites() {
+//		// System.out.println("Getting Sites");
+//		SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SITE).build();
+//		List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
+//		// System.out.println("Returning " + s.size() + " Sites.");
+//		return s;
+//	}
+
+	// Mock API
 	public List<Site> getSites() {
-		// System.out.println("Getting Sites");
-		SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SITE).build();
-		List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
-		// System.out.println("Returning " + s.size() + " Sites.");
+		System.out.println("[mock] Getting Sites");
+		List<Site> s = Arrays.asList(new Site[] {new Site("classic"), new Site("mobile")});
+		System.out.println("[mock] Returning " + s.size() + " Sites.");
 		return s;
 	}
 
@@ -92,19 +147,19 @@ public class MobileRedirectBean implements Serializable {
 	public List<String> getNodes() {
 		// TODO: get from portal
 		ArrayList<String> nodes = new ArrayList<String>();
-		nodes.add("customers");
-		nodes.add("organization");
-		// nodes.add("/organization/communication");
-		// nodes.add("/organization/communication/marketing");
-		// nodes.add("/organization/communication/press-and-media");
-		// nodes.add("/organization/management");
-		// nodes.add("/organization/management/executive-board");
-		// nodes.add("/organization/management/human-resources");
-		// nodes.add("/organization/operations/operations");
-		// nodes.add("/organization/operations/finances");
-		// nodes.add("/organization/operations/sales");
-		// nodes.add("/organization/operations/partners");
-		// nodes.add("/organization/operations/administrators");
+		nodes.add("/customers");
+		nodes.add("/organization");
+		nodes.add("/organization/communication");
+		nodes.add("/organization/communication/marketing");
+		nodes.add("/organization/communication/press-and-media");
+		nodes.add("/organization/management");
+		nodes.add("/organization/management/executive-board");
+		nodes.add("/organization/management/human-resources");
+		nodes.add("/organization/operations/operations");
+		nodes.add("/organization/operations/finances");
+		nodes.add("/organization/operations/sales");
+		nodes.add("/organization/operations/partners");
+		nodes.add("/organization/operations/administrators");
 		// nodes.add("/organization/operations/guests");
 		// nodes.add("/organization/operations/users");
 		// nodes.add("/organization/operations/employees");

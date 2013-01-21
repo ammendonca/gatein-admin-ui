@@ -16,7 +16,9 @@ body > #wrap {
 	min-height: 100%;
 }
 
+/* ammendonca: not suitable for portal
 body {background: url("#{resource['/img/body-bg.jpg']}") repeat left top;}
+*/
 
 .link {
 	background: none;
@@ -68,6 +70,11 @@ a.close {
 	background: url(#{resource['/img/icon-close.png']}) no-repeat left top;
 }
 
+input[type="file"] {
+	height: auto;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
 .alert .close {top: 3px;}
 
 h1,
@@ -83,6 +90,7 @@ button {
 }
 
 .hidden-element {display: none!important;}
+.visible {visibility: visible!important;}
 
 .toggle {
 	cursor: pointer;
@@ -95,7 +103,9 @@ button {
 
 .toggle.closed {background-image: url(#{resource['/img/icon-arrow-closed.png']});}
 
-.dropdown-toggle {cursor: pointer;}
+.dropdown-toggle {
+	cursor: pointer;
+}
 
 .dropdown-menu.up {
 	bottom: 100%;
@@ -316,14 +326,18 @@ aside {
 .nav-list a {
 	color: #444;
 	font-size: 14px;
+}
+
+.nav-list li:hover a {text-decoration: none;}
+
+.nav-list li li:hover,
+.nav-list li li.open {
+	background-color: rgba(0,0,0,0.04);
 	border-radius: 5px 0 0 5px;
 }
 
-.nav-list a:hover,
-.nav > li > a:hover {
-	background-color: rgba(0,0,0,0.04);
-	text-decoration: none;
-}
+.nav-list > li > ul > li.active:hover,
+.nav-list > li > ul > li.active.open {background: none;}
 
 .nav-list a i {margin-top: 2px;}
 
@@ -339,6 +353,7 @@ aside {
 	background-color: #005490;
 	text-shadow: 0px 1px 0px #000;
 	color: #fff;
+	border-radius: 5px 0 0 5px;
 }
 
 .nav-list .active > a {font-weight: bold;}
@@ -347,10 +362,10 @@ aside {
 
 .nav-list li.active > ul li a {
 	display: block;
-    line-height: 16px;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 7px 15px 8px 45px;
+	line-height: 16px;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 7px 15px 8px 45px;
 }
 
 .nav-list .active > ul > .active > a {
@@ -371,10 +386,47 @@ aside {
 
 .nav-list li#pages-nav:hover a#add-page {visibility: visible;}
 
-.nav-list li#pages-nav:hover a {background-color: rgba(0, 0, 0, 0.04);}
-
 .nav-list a#add-page:hover, 
 .nav-list li#pages-nav:hover a#add-page {background-color: transparent;}
+
+.nav-list > li > ul > li {position: relative;}
+
+.nav-list > li li > span {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.nav-list > li li:hover > span,
+.nav-list > li li.open > span {visibility: visible;}
+
+.nav-list > li li.active > span i,
+.nav-list > li li.active.open > span i {background-image: url("#{resource['/img/glyphicons-halflings-white.png']}");}
+
+.nav-list > li li.open > span i {background-image: url("#{resource['/img/glyphicons-halflings.png']}");}
+
+.nav-list > li li:not(.active) > span i:hover {background-image: url("#{resource['/img/glyphicons-halflings.png']}");}
+
+.nav-list .dropdown-menu {
+	top: 26px;
+	right: 2px;
+	left: auto;
+	z-index: 1000;
+}
+
+.nav-list .dropdown-menu:after {
+	border-bottom: 6px solid #FFFFFF;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	content: "";
+	display: inline-block;
+	left: auto;
+	right: 10px;
+	position: absolute;
+	top: -6px;
+}
 
 .nav-list .more {
 	float: right;
@@ -457,21 +509,22 @@ aside .actions #add-space:hover a {
 
 #container-right {
 	margin-left: 0;
-	padding-top: 30px;
+	/*padding-top: 30px;*/
 	position: relative;
 	z-index: 10;
 	padding-bottom: 50px;
-	margin-top: 40px;
+	/*margin-top: 40px;*/
 }
 
 #container-right-bg {
-	position: fixed;
-    top: 40px;
+	position: absolute;
+    top: 144px;
 	bottom: 0;
     background-color: #fff;
 	box-shadow:0px 0px 5px rgba(0,0,0,0.1);
-    margin-left: 240px;
+    margin-left: 202px;
     width: 720px;
+    height: 80%;
 }
 
 h1 {
@@ -591,7 +644,7 @@ td.styles-hidden,
 
 .form-mobile-redirect .header-mobile-redirect .control-group,
 .form-mobile-redirect .header-mobile-redirect .control-group:last-child {
-	width: 260px;
+	width: 200px; /* was 260 */
 	margin-left: 35px;
 	margin-bottom: 0;
 }
@@ -1052,12 +1105,12 @@ span.td-condition {
 	margin-left: 5px;
 }
 
-#condition-properties input.property {width: 90px;}
+#condition-properties input.property {width: 100px;}
 
 #condition-properties td.condition input.property {margin-left: 31px;}
 
 #condition-properties div input {
-	width: 30px;
+	width: 40px;
 	margin-right: 0;
 }
 
@@ -1076,11 +1129,14 @@ span.td-condition {
 }
 
 .input-append-inline input {
-	text-align: right;
+	text-align: left; /* ammendonca: was right.. */
 	padding-right: 19px;
 }
 
-select.attribute {width: 105px;}
+select.attribute {
+	width: 117px;
+	vertical-align: top;
+}
 
 
 /* Modal Permission Settings */
@@ -1159,3 +1215,30 @@ select.attribute {width: 105px;}
     width: 10%;
 }
 
+/* Modal Import Site */
+
+.modal .attachment {
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 3px 10px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+.modal .attachment span {font-weight: bold;}
+
+.modal .attachment button {
+    margin-left: 20px;
+    opacity: .3;
+}
+
+.modal .attachment button:hover {opacity: 1;}
+
+.hOne {
+	font-family: 'Ubuntu';
+	margin-bottom: 10px;
+	margin-top: -7px;
+	margin-left: 0;
+  	font-size: 26px;
+	font-weight: normal;	
+}

@@ -1,5 +1,18 @@
 $(document).ready(function(){
-// Bootstrap js
+	init();
+});
+
+// because when we get new content through ajax, it needs to be initialized too...
+$(window).load(function () {
+	jsf.ajax.addOnEvent(function(data) {
+		if (data.status === 'success') {
+			init();
+		}
+	});
+});
+
+function init() {
+	// Bootstrap js
 	bootstrapDropdown();
 	bootstrapTooltip();
 	bootstrapAlert();
@@ -7,7 +20,7 @@ $(document).ready(function(){
 	bootstrapButton();
 	bootstrapModal();
 	bootstrapTypeahead();
-// Useful js
+	// Useful js
 	button();
 	toggleContent();
 	showHideMore();
@@ -15,16 +28,91 @@ $(document).ready(function(){
 	clearInputTextValue();
 	switchGroupView();
 	selectGroupInHierarchicalView();
-// Provisional js	
+	// Provisional js	
 	selectPermission();
 	accessPermissionButton();
 	accessPermissionTable();
 	feedback();
 	editRedirect();
-// Useful js that makes other ones not work
+	// Useful js that makes other ones not work
 	//sortable();
-});
+}
 
+/* =========================
+ * == ADD CONDITION MODAL ==
+ * =========================
+ */
+
+function addUAString(element) {
+	$(element).closest('td').append($('div.tt-ua').html());
+	$(element).closest('td').children('div:last').children('input').focus();
+	// set opacity to 0 so it keeps its space, and remove tooltip
+	// $(element).css('opacity','0');
+	// $(element).removeClass('tooltipTrigger');
+	// $(element).removeAttr("data-original-title");
+	// $(element).removeAttr('onclick');
+	$(element).hide();
+	init();
+}
+
+function removeUAString(element) {
+	$(element).tooltip('hide');
+	// $(element).closest('div.more-condition').prev().find('button.add-user-agent-string').css('opacity','1');
+	// $(element).addClass('tooltipTrigger');
+	// $(element).attr('onclick', 'addUAString(this);');
+	parent = $(element).closest('div.more-condition').parent();
+	$(element).closest('div.more-condition').remove();
+	parent.children('div:last').find('button.add-user-agent-string').show();
+	init();
+}
+
+function addProperty(element) {
+	$(element).closest('tbody').append($('tbody.tt-pp').html());
+	$(element).closest('tbody').children('tr:last').children('input').focus();
+	$(element).hide();
+	init();
+}
+
+function removeProperty(element) {
+	$(element).tooltip('hide');
+	parent = $(element).closest('tr.more-property').parent();
+	$(element).closest('tr.more-property').remove();
+	parent.children('tr:last').find('button.add-property').show();
+	init();
+}
+
+function propertyFields(element) {
+	// Change input box(es) according to selected option
+	$(element).next().html($('.tt-' + $(element).val()).html());
+}
+
+function addMappingEntry() {
+	// Add a new entry
+	$('#mappings-tbody').prepend($('#tt-nm').children().html());
+	// And move focus to it
+	$('#mappings-tbody').find("input").first().focus();
+	// Make JS work on the new components
+	init();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --- UNUSED (SO FAR) ---
 
 // Enabling dropdown
 bootstrapDropdown = function() {
@@ -46,7 +134,7 @@ bootstrapTooltip = function() {
 
 // Enabling/Disabling alert
 bootstrapAlert = function() {
-	$(".alert").alert();
+	$('.alert').alert();
 	$('.alert button.close').click(function(){
 		$(this).parent.parent.alert('hide');	
 	});
@@ -76,11 +164,63 @@ bootstrapModal = function() {
 	$('.delete-permission').click(function() {
 		$('#modal-delete-permission').modal();
 	});
+	$('.delete-site').click(function() {
+		// Set proper values for site to delete
+		siteName = $(this).parent().parent().children("a").text().trim();
+		$('#delete-site-id-input').attr("value", siteName);
+		$('#delete-site-id-text').text(siteName);
+		// Forcing dropdown to close.. should be automatic
+		$(this).parent().parent().removeClass("open");
+		$('#modal-delete-site').modal();
+	});
 	$('.delete-redirect').click(function() {
 		$('#modal-delete-redirect').modal();
 	});
+	$('#import-site').click(function() {
+		$('#file').bind("change", function (e) {
+			//get the file path
+			var file = $('#file').val();
+			//pull out the filename
+			file = file.replace(/^.*\\/i, "");
+			//show to user
+			$('#fileName').text(file);
+			$('#file').fadeOut(300, function() {
+				$('#file-attachment').fadeIn(300)
+			});
+		});
+
+		$('#file-remove-btn').click(function() {
+			$('#file').val("");
+			$('#file-attachment').fadeOut(300, function() {
+				$('#file').fadeIn(300)
+			});
+		});
+
+		$('#modal-import-site').modal();
+		// don't be a link
+		return false;
+	});
+	$('#btn-add-mapping').click(function() {
+		addMappingEntry();
+	})
 	$('.select-node').click(function() {
+		nodeInput = $(this).parent().children("input");
 		$('#modal-select-node').modal();
+		// Allow double click
+		$('.radio-node').parent("label").dblclick(function() {
+			$('#button-select-node').click();
+		});
+	});
+	$('#button-select-node').click(function() {
+		sNode = $(".radio-node:checked").attr("id");
+		nInput = $(nodeInput).parent().children("input");
+		window.setTimeout(function() {
+			$(".radio-node").first().click()
+			nInput.focus();
+			nInput.val(sNode);
+		}, 50)
+		$('#modal-select-node').modal('hide');
+		return false;
 	});
 	$('.add-condition').click(function() {
 		$('#modal-condition').modal();
@@ -193,7 +333,7 @@ selectGroupInHierarchicalView = function() {
 	var ulHeight = $('.window-tree div ul').height();
 	if (ulHeight > 375){
 		$('.window-tree div ul').addClass('scroll');
-	};
+	}
 	$('.window-tree a').click(function() { 
 		$('.window-tree a').parent().removeClass('active');
 		$(this).parent().addClass('active');
@@ -260,32 +400,55 @@ feedback = function() {
 	});
 };
 
+
 // Redirect
 editRedirect = function() {
+
+	// Fade out summary or initial and fade in edit on "Add Redirect" button click
 	$('#add-redirect').click(function(){
-		$('.initial').addClass('hidden-element');
+		$('#add-redirect').attr("disabled", "disabled");
+
+		// fade summary out (if present)...
+		$('.redirect-summary').fadeOut(300, function() {
+			// .. and when done, fade config in
+			$('.edit-group').fadeIn(300)
+		});
+		// fade initial out (if present)...
+		$('.initial').fadeOut(300, function() {
+			// .. and when done, fade config in
+			$('.edit-group').fadeIn(300)
+		});
+
+		// clear the form
 	});
-	$('#add-redirect, #container-right > table > tbody > tr:first-child td.actions > a').click(function(){
-		$('#add-redirect').addClass('transparent');
-		$('.form-mobile-redirect').addClass('fade-in');
-		$('.form-mobile-redirect').siblings().addClass('transparent');
-	});
+
+	// Fade out summary and fade in edit on "Configure" link click
 	$('.configure-redirect').click(function(){
-		$(this).parent().parent().addClass('hidden-element');
+		$('#add-redirect').attr("disabled", "disabled");
+
+		// fade summary out...
+		$('.redirect-summary').fadeOut(300, function() {
+			// .. and when done, fade config in
+			$('.edit-group').fadeIn(300)
+		});		
 	});
 	
-	$('.form-mobile-redirect .btn-primary').click(function(){
-		$('.form-mobile-redirect').addClass('hidden-element');
-		$('.yellow').removeClass('hidden-element');
-		$('.yellow').addClass('fade-in');
-		$('#add-redirect').removeClass('transparent');
-		$('thead[id*=redirect-summary-header]').removeClass('hidden-element');
-		$('thead[id*=redirect-summary-header]').removeClass('injectable');
-		$('.form-mobile-redirect').siblings().removeClass('transparent');
+	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
+	$('.site-link').click(function(){
+		$(".edit-group").hide();
 	});
+
+	// On "Cancel" or "Save Changes" hide the edit form and show the summary
+	$('#edit_save-changes, #edit_cancel').click(function(){
+		$('.edit-group').fadeOut(300, function() {
+			$('.redirect-summary').fadeIn(300)
+		});
+		$('#add-redirect').removeAttr("disabled");
+	});
+
 	$('.edit-node-mapping').click(function(){
 		$(this).parent().parent().addClass('hidden-element');
-		$(this).parent().parent().next('tr').removeClass('hidden-element');
+		$(this).parent().parent().nextAll('tr .hidden-element').first().removeClass('hidden-element');
 		return false;
 	});
 	$('#modal-delete-redirect .btn-primary').click(function(){
@@ -326,5 +489,6 @@ anchorAnimation = function() {
 };
 */
 
+/* Modal Import Site */
 
 
