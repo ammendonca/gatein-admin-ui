@@ -18,7 +18,7 @@
    <name>GateIn Mobile Admin UI Parent</name>
 
    <properties>
-      <version.portlet-bridge>3.2.0.Final-SNAPSHOT</version.portlet-bridge>
+      <version.portlet-bridge>3.2.0.Alpha1</version.portlet-bridge>
    </properties>
 
    <modules>
