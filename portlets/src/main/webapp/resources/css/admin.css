@@ -509,13 +509,20 @@ aside .actions #add-space:hover a {
 
 #container-right {
 	margin-left: 0;
-	/*padding-top: 30px;*/
+	padding-top: 30px;
 	position: relative;
 	z-index: 10;
 	padding-bottom: 50px;
 	/*margin-top: 40px;*/
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+	min-height: 750px;
+	width: 700px;
+	background-color: #fff;
+	top: -20px;
+	right: 14px;
 }
 
+/* ammendonca: not used anymore
 #container-right-bg {
 	position: absolute;
     top: 144px;
@@ -526,6 +533,7 @@ aside .actions #add-space:hover a {
     width: 720px;
     height: 80%;
 }
+*/
 
 h1 {
 	margin-bottom: 10px;
