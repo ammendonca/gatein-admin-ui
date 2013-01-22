@@ -91,8 +91,6 @@ function addMappingEntry() {
 	$('#mappings-tbody').prepend($('#tt-nm').children().html());
 	// And move focus to it
 	$('#mappings-tbody').find("input").first().focus();
-	// Make JS work on the new components
-	init();
 }
 
 
@@ -121,14 +119,9 @@ bootstrapDropdown = function() {
 
 // Enabling tooltip
 bootstrapTooltip = function() {
-	$('.tooltipTrigger').tooltip({
-		placement: 'top'
-	});
-	$('.tooltipRightTrigger').tooltip({
-		placement: 'right'
-	});
-	$('.tooltipBottomTrigger').tooltip({
-		placement: 'bottom'
+	// $('body') makes it live, works for future components
+	$('body').tooltip({
+		selector: '.tooltipTrigger'
 	});
 };
 
