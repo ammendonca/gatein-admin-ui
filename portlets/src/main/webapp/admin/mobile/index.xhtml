@@ -132,7 +132,7 @@
 																</ui:repeat>
 															</td>
 															<td class="actions">
-																<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#modal-condition').modal()" value="Edit"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /></a4j:commandLink>
+																<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#modal-condition').modal()"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit Condition">Edit Condition</i></a4j:commandLink>
 																<button class="tooltipTrigger" title="Delete Condition"><i class="icon-trash">Delete Condition</i></button>
 															</td>
 														</tr>
@@ -175,7 +175,7 @@
 															<td>#{m.originNode}</td>
 															<td>#{m.redirectNode}</td>
 															<td class="actions">
-																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping"><i class="icon-pencil">Edit Node Mapping</i></a>
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" onclick="editMappingEntry(this)"><i class="icon-pencil">Edit Node Mapping</i></a>
 																<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this)"><i class="icon-trash">Delete Node Mapping</i></a>
 															</td>
 														</tr>

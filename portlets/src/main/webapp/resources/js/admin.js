@@ -93,6 +93,11 @@ function addMappingEntry() {
 	$('#mappings-tbody').find("input").first().focus();
 }
 
+function editMappingEntry(elem) {
+	$(elem).parent().parent().addClass('hidden-element');
+	$(elem).parent().parent().nextAll('tr .hidden-element').first().removeClass('hidden-element');
+	return false;
+}
 
 function deleteMappingEntry(elem) {
 	$(elem).tooltip("hide");
@@ -488,11 +493,6 @@ editRedirect = function() {
 		$('#add-redirect').removeAttr("disabled");
 	});
 
-	$('.edit-node-mapping').click(function(){
-		$(this).parent().parent().addClass('hidden-element');
-		$(this).parent().parent().nextAll('tr .hidden-element').first().removeClass('hidden-element');
-		return false;
-	});
 	$('#modal-delete-redirect .btn-primary').click(function(){
 		$(this).parent().parent().modal('hide');
 		$('.alert-container').removeClass('hidden-element');	
