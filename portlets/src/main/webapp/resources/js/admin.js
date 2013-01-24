@@ -94,7 +94,59 @@ function addMappingEntry() {
 }
 
 
+function deleteMappingEntry(elem) {
+	$(elem).tooltip("hide");
+	parentTR = $(elem).parent("td").parent("tr");
+	if ($(parentTR).hasClass("node-mapping-viewer")) {
+		spacerTR = $(parentTR).next("tr");
+		editorTR = $(spacerTR).next("tr");
+		$(parentTR).remove();
+		$(spacerTR).remove();
+		$(editorTR).remove();
+	}
+	else if ($(parentTR).hasClass("node-mapping-editor")) {
+		if($(parentTR).prev("tr").hasClass("node-mapping-spacer")) {
+			spacerTR = $(parentTR).prev("tr");
+			editorTR = $(spacerTR).prev("tr");
+			$(parentTR).remove();
+			$(spacerTR).remove();
+			$(editorTR).remove();
+		}
+		else {
+			$(parentTR).remove();
+		}
+	}
+	return false;
+}
 
+// $("body").on("click", "a.delete-node-mapping", function() {
+// 	$(this).tooltip("hide");
+// 	parentTR = $(this).parent("td").parent("tr");
+// 	if ($(parentTR).hasClass("node-mapping-viewer")) {
+// 		spacerTR = $(parentTR).next("tr");
+// 		editorTR = $(spacerTR).next("tr");
+// 		$(parentTR).remove();
+// 		$(spacerTR).remove();
+// 		$(editorTR).remove();
+// 	}
+// 	else if ($(parentTR).hasClass("node-mapping-editor")) {
+// 		if($(parentTR).prev("tr").hasClass("node-mapping-spacer")) {
+// 			spacerTR = $(parentTR).prev("tr");
+// 			editorTR = $(spacerTR).prev("tr");
+// 			$(parentTR).remove();
+// 			$(spacerTR).remove();
+// 			$(editorTR).remove();
+// 		}
+// 		else {
+// 			$(parentTR).remove();
+// 		}
+// 	}
+// 	return false;
+// });
+
+// $('#btn-add-mapping').click(function() {
+// 	addMappingEntry();
+// });
 
 
 
@@ -193,9 +245,6 @@ bootstrapModal = function() {
 		// don't be a link
 		return false;
 	});
-	$('#btn-add-mapping').click(function() {
-		addMappingEntry();
-	})
 	$('.select-node').click(function() {
 		nodeInput = $(this).parent().children("input");
 		$('#modal-select-node').modal();

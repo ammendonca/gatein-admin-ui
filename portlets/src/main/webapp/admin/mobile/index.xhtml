@@ -160,7 +160,7 @@
 										<div class="control-group">
 											<label class="control-label">Mappings</label>
 											<div class="controls">
-												<a id="btn-add-mapping" class="btn btn-small inside-table">Add Mapping</a>
+												<a id="btn-add-mapping" class="btn btn-small inside-table" onclick="addMappingEntry()">Add Mapping</a>
 												<table class="table table-striped action-button" id="mappings">
 													<thead>
 														<tr>
@@ -170,44 +170,23 @@
 														</tr>
 													</thead>
 													<tbody id="mappings-tbody">
-														<tr>
-															<td>
-																<b:input scale="medium" placeholder="e.g. homepage" >
-																	<b:autocomplete suggestions="#{mr.nodes}" />
-																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List"><i class="icon-list" ></i></b:commandButton>
-																	</f:facet>
-																</b:input>
-															</td>
-															<td>
-																<b:input scale="medium" placeholder="e.g. home_page" >
-																	<b:autocomplete suggestions="#{mr.nodes}" />
-																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List"><i class="icon-list" ></i></b:commandButton>
-																	</f:facet>
-																</b:input>
-															</td>
-															<td class="actions">
-																<a href="#" class="edit-node-mapping tooltipTrigger" title="Delete Node Mapping"><i class="icon-trash">Delete Node Mapping</i></a>
-															</td>
-														</tr>
 														<ui:repeat value="#{rdrEdit.mappings.mappings}" var="m">
-														<tr>
+														<tr class="node-mapping-viewer">
 															<td>#{m.originNode}</td>
 															<td>#{m.redirectNode}</td>
 															<td class="actions">
-																<a href="#" class="link edit-node-mapping">Edit</a>
-																<a href="#" class="edit-node-mapping tooltipTrigger" title="Delete Node Mapping"><i class="icon-trash">Delete Node Mapping</i></a>
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping"><i class="icon-pencil">Edit Node Mapping</i></a>
+																<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this)"><i class="icon-trash">Delete Node Mapping</i></a>
 															</td>
 														</tr>
 														<!-- Just so that we keep the odd/even colors -->
-														<tr style="display: none;"><td></td></tr>
-														<tr class="hidden-element">
+														<tr class="node-mapping-spacer" style="display: none;"><td></td></tr>
+														<tr class="node-mapping-editor hidden-element">
 															<td>
 																<b:input scale="medium" placeholder="e.g. homepage" value="#{m.originNode}">
 																	<b:autocomplete suggestions="#{mr.nodes}" />
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -2px;"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>
@@ -215,12 +194,13 @@
 																<b:input scale="medium" placeholder="e.g. home_page" value="#{m.redirectNode}">
 																	<b:autocomplete suggestions="#{mr.nodes}" />
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -2px;"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>
 															<td class="actions">
-																<a href="#" class="edit-node-mapping tooltipTrigger" title="Delete Node Mapping"><i class="icon-trash">Delete Node Mapping</i></a>
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" style="visibility: hidden;"><i class="icon-pencil">Edit</i></a>
+																<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this)"><i class="icon-trash">Delete Node Mapping</i></a>
 															</td>
 														</tr>
 														</ui:repeat>
@@ -255,12 +235,12 @@
 
 		<!-- Template for new node mappings -->
 		<table id="tt-nm" style="display: none;">
-			<tr>
+			<tr class="node-mapping-editor">
 				<td>
 					<b:input scale="medium" placeholder="e.g. homepage" >
 						<b:autocomplete suggestions="#{mr.nodes}" />
 						<f:facet name="append">
-							<b:commandButton icon="list" styleClass="tooltipTrigger select-node" title="View Node List" />
+							<b:commandButton icon="list" styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -2px;" />
 						</f:facet>
 					</b:input>
 				</td>
@@ -269,12 +249,13 @@
 					<b:input scale="medium" placeholder="e.g. home_page" >
 						<b:autocomplete suggestions="#{mr.nodes}" />
 						<f:facet name="append">
-							<b:commandButton icon="list" styleClass="tooltipTrigger select-node" title="View Node List" />
+							<b:commandButton icon="list" styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -2px;"/>
 						</f:facet>
 					</b:input>
 				</td>
 				<td class="actions">
-					<a href="#" class="edit-node-mapping tooltipTrigger" title="Delete Node Mapping"><i class="icon-trash">Delete Node Mapping</i></a>
+					<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" style="visibility: hidden;"><i class="icon-pencil">Edit Node Mapping</i></a>
+					<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this)"><i class="icon-trash">Delete Node Mapping</i></a>
 				</td>
 			</tr>
 		</table>
