@@ -83,11 +83,11 @@
 									<div class="control-group">
 										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
 										<div class="controls">
-											<b:input scale="medium" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}"/>
+											<b:input scale="medium" style="margin-left: -45px;" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}" />
 										</div>
 									</div>
 									<div class="control-group">
-										<h:outputLabel for="redirect" styleClass="control-label">Redirect to</h:outputLabel>
+										<h:outputLabel for="redirect" style="margin-left: 65px;" styleClass="control-label">Redirect to</h:outputLabel>
 										<div class="controls">
 											<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
 												<f:selectItems value="#{mr.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.id}"/>
