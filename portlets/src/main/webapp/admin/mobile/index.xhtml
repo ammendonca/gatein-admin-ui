@@ -30,11 +30,11 @@
 					<tbody>
 					<ui:repeat value="#{mr.redirects}" var="r" varStatus="status">
 						<!-- Redirect Summary Row -->
-						<tr id="rdr_sum_${status.index}" class="redirect-summary">
+						<tr id="rdr_sum_#{status.index}" class="redirect-summary">
 							<td>
 								<div class="onoffswitch">
-									<h:selectBooleanCheckbox id="rdr_toggle_${status.index}" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
-									<h:outputLabel for="rdr_toggle_${status.index}" styleClass="onoffswitch-label">
+									<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
+									<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
 										<span class="onoffswitch-inner">
 											<span class="onoffswitch-active">ON</span>
 											<span class="onoffswitch-inactive">OFF</span>
