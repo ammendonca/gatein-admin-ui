@@ -708,7 +708,7 @@ tbody.sortable tr:hover td:nth-child(1) {background: url(#{resource['/img/icon-g
 
 tbody.sortable tr td:nth-child(1) {width: 110px;}
 tbody.sortable tr td:nth-child(2) {width: 290px;}
-tbody.sortable tr td:nth-child(3) {width: 110px;}
+tbody.sortable tr td:nth-child(3) {width: 50px;} /* ammendonca: was 110px */
 
 /* Page Space Configuration */
 

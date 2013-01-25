@@ -115,16 +115,20 @@
 														<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
 														<tr class="ui-state-default">
 															<td>#{rc.name}</td>
-															<td>Contains 
+															<td> 
 																<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
+																	<h:panelGroup rendered="#{cnt_st.first}">
+																	<strong>Contains </strong>
+																	</h:panelGroup>
 																	<h:panelGroup rendered="#{not cnt_st.first}">
 																	 OR 
 																	</h:panelGroup>
 																	'#{rcUACcont}'
 																</ui:repeat>
-															</td>
-															<td>Does not contain
 																<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
+																	<h:panelGroup rendered="#{dnc_st.first}">
+																	<strong>Does not contain </strong>
+																	</h:panelGroup>
 																	<h:panelGroup rendered="#{not dnc_st.first}">
 																	 OR 
 																	</h:panelGroup>
