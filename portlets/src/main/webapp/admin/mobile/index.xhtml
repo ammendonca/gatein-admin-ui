@@ -35,6 +35,7 @@
 								<div class="onoffswitch">
 									<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
 									<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
+										<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(mr.siteName, r.name)}" />
 										<span class="onoffswitch-inner">
 											<span class="onoffswitch-active">ON</span>
 											<span class="onoffswitch-inactive">OFF</span>
