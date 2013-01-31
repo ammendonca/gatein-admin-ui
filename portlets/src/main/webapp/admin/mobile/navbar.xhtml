@@ -13,13 +13,14 @@
 					<h:link outcome="/admin/mobile/index.xhtml" value="Administration" styleClass="brand"/>
 				</f:facet>
 				
-					<b:menuFacet label="Sites">
-						<c:forEach items="#{mr.sites}" var="s">
-							<h:commandLink action="${mr.setSiteName(s.name)}" ajax="true">
-								<b:icon value="globe" color="grey" /> ${s.name}
-							</h:commandLink>
-						</c:forEach>
-					</b:menuFacet>
+				<!-- NO TOP MENU!
+				<b:menuFacet label="Sites">
+					<c:forEach items="#{mr.sites}" var="s">
+						<h:commandLink action="${mr.setSiteName(s.name)}" ajax="true">
+							<b:icon value="globe" color="grey" /> ${s.name}
+						</h:commandLink>
+					</c:forEach>
+				</b:menuFacet>
 		
 				<b:menuFacet label="Spaces">
 					<h:link outcome="/admin/mobile/index.xhtml" value="Users Space"/>
@@ -27,6 +28,7 @@
 				</b:menuFacet>
 		
 				<h:link outcome="/admin/mobile/index.xhtml" value="Dashboard"/>
+				-->
 			</b:navbar>
 		</h:form>
 	</div>
