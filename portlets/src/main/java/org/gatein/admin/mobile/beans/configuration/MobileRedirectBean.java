@@ -34,11 +34,10 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
-import org.gatein.admin.mobile.mocks.Site;
-//import org.gatein.api.PortalRequest;
-//import org.gatein.api.portal.site.Site;
-//import org.gatein.api.portal.site.SiteQuery;
-//import org.gatein.api.portal.site.SiteType;
+import org.gatein.api.PortalRequest;
+import org.gatein.api.site.Site;
+import org.gatein.api.site.SiteQuery;
+import org.gatein.api.site.SiteType;
 
 @ManagedBean(name = "mr")
 @ViewScoped
@@ -127,18 +126,22 @@ public class MobileRedirectBean implements Serializable {
 	}
 
 //	// TODO: Move this to an API bean
-//	public List<Site> getSites() {
-//		// System.out.println("Getting Sites");
-//		SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SITE).build();
-//		List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
-//		// System.out.println("Returning " + s.size() + " Sites.");
-//		return s;
-//	}
+	public List<Site> getSites() {
+		System.out.println("[api] Getting Sites");
+		SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SITE).build();
+		List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
+		System.out.println("[api] Returning " + s.size() + " Sites.");
+		return s;
+	}
 
 	// Mock API
-	public List<Site> getSites() {
+	public List<org.gatein.admin.mobile.mocks.Site> getMockSites() {
 		System.out.println("[mock] Getting Sites");
-		List<Site> s = Arrays.asList(new Site[] {new Site("classic"), new Site("mobile")});
+		List<org.gatein.admin.mobile.mocks.Site> s = Arrays.asList(
+				new org.gatein.admin.mobile.mocks.Site[] {
+						new org.gatein.admin.mobile.mocks.Site("classic"), 
+						new org.gatein.admin.mobile.mocks.Site("mobile")
+				});
 		System.out.println("[mock] Returning " + s.size() + " Sites.");
 		return s;
 	}
@@ -167,4 +170,5 @@ public class MobileRedirectBean implements Serializable {
 		// nodes.add("/organization/operations/design");
 		return nodes;
 	}
+
 }

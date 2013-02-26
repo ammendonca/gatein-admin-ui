@@ -18,10 +18,11 @@
    <name>GateIn Mobile Admin UI Portlets</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.3.7-GA</org.exoplatform.kernel.version>
+      <org.exoplatform.kernel.version>2.4.1-GA</org.exoplatform.kernel.version>
       <version.richfaces>4.3.0-SNAPSHOT</version.richfaces>
+      <version.richfaces.bootstrap>4.3.0-SNAPSHOT</version.richfaces.bootstrap>
       <qualifier.richfaces>jbas71</qualifier.richfaces>
-      <version.gatein.component>3.5.0.Final</version.gatein.component>
+      <version.gatein.component>3.6.0.MO1-SNAPSHOT</version.gatein.component>
       <version.jsf2.api>2.1</version.jsf2.api>
       <version.jsf2.impl>2.1.5</version.jsf2.impl>
    </properties>
@@ -44,11 +45,10 @@
    </build>
 
    <dependencies>
-      <!--dependency>
+      <dependency>
          <groupId>org.gatein.api</groupId>
          <artifactId>gatein-api</artifactId>
-         <version>1.0.0.Alpha01-SNAPSHOT</version>
-      </dependency-->
+      </dependency>
       <dependency>
          <groupId>org.gatein.common</groupId>
          <artifactId>common-common</artifactId>
@@ -127,7 +127,7 @@
       <dependency>
          <groupId>org.richfaces.sandbox.ui.bootstrap</groupId>
          <artifactId>bootstrap-ui</artifactId>
-         <version>${version.richfaces}</version>
+         <version>${version.richfaces.bootstrap}</version>
       </dependency>
    </dependencies>
 

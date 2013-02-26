@@ -18,7 +18,8 @@
    <name>GateIn Mobile Admin UI Parent</name>
 
    <properties>
-      <version.portlet-bridge>3.2.0.Alpha1</version.portlet-bridge>
+      <version.portlet-bridge>3.2.0.Beta1</version.portlet-bridge>
+      <version.gatein-api-java>1.0.0.Alpha02-SNAPSHOT</version.gatein-api-java>
    </properties>
 
    <modules>
@@ -51,7 +52,7 @@
         <dependency>
            <groupId>org.gatein.api</groupId>
            <artifactId>gatein-api</artifactId>
-           <version>1.0.0.Alpha01-SNAPSHOT</version>
+           <version>${version.gatein-api-java}</version>
         </dependency>
       </dependencies>
    </dependencyManagement>

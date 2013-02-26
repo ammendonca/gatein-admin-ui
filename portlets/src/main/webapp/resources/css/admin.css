@@ -669,7 +669,7 @@ td.styles-hidden,
 .header-mobile-redirect input,
 .header-mobile-redirect select {width: 145px;}
 
-a.inside-table {float: right;}
+a.inside-table, button.inside-table {float: right;}
 
 .table-striped tbody .table-striped tr:nth-child(2n+1) th,
 .table-striped tbody .table-striped tr:nth-child(2n) td {background-color: #fff;}
@@ -1085,7 +1085,7 @@ span.td-condition {
 	width: 390px;
 }
 
-#condition-string div.condition {width: 359px;}
+#condition-string div.condition {width: 363px;}
 
 #condition-string td > div:last-child {margin-bottom: 0;}
 
@@ -1098,9 +1098,13 @@ span.td-condition {
 	margin-top: 5px;
 }
 
-#condition-string div:hover div button {visibility: visible;}
+#condition-string div:hover div a,
+#condition-string div:hover div button
+ {visibility: visible;}
 
-#condition-string button+button {margin-left: 5px;}
+#condition-string button+button,
+#condition-string a+a,
+#condition-string button+a {margin-left: 5px;}
 
 #condition-properties td.condition {width: 175px;}
 

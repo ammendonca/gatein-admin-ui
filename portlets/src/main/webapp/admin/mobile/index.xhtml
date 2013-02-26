@@ -102,9 +102,9 @@
 										<span class="toggle">Conditions</span>
 									</legend>
 									<div>
-										<div class="control-group">
+										<h:panelGroup id="conditions-group" styleClass="control-group">
 											<div class="controls">
-												<a class="btn btn-small inside-table add-condition">Add Condition</a>
+												<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#modal-condition').modal('show');" execute="@this" render=":condition_form" />
 												<table class="table table-striped button-small">
 													<thead>
 														<tr>
@@ -146,7 +146,7 @@
 													</tbody>
 												</table>							
 											</div>
-										</div><!-- End .control-group -->
+										</h:panelGroup><!-- End .control-group -->
 									</div>
 								</fieldset>
 								<fieldset>
@@ -240,6 +240,7 @@
 
 
 		<!-- Template for new node mappings -->
+		<h:form> <!-- Just to avoid the warnings... -->
 		<table id="tt-nm" style="display: none;">
 			<tr class="node-mapping-editor">
 				<td>
@@ -265,6 +266,7 @@
 				</td>
 			</tr>
 		</table>
+		</h:form>
 
 		<script type="text/javascript">
 			$(document).ready(function(){

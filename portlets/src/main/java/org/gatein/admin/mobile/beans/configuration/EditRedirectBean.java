@@ -32,10 +32,12 @@ import javax.faces.context.FacesContext;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.DevicePropertyCondition;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.RedirectCondition;
 import org.exoplatform.portal.config.model.RedirectMappings;
+import org.exoplatform.portal.config.model.UserAgentConditions;
 
 @ManagedBean(name = "rdrEdit")
 @ViewScoped
@@ -62,7 +64,6 @@ public class EditRedirectBean implements Serializable {
 	protected boolean enabled;
 	protected String redirectSite;
 
-	protected ArrayList<RedirectCondition> conditions;
 	protected RedirectMappings mappings;
 
 	/**
@@ -98,11 +99,12 @@ public class EditRedirectBean implements Serializable {
 		this.isEdit = true;
 	}
 
-	public boolean getEnabled() {
-		System.out.println("[EditRedirectBean] '" + getName() + "' isEnabled() = " + enabled);
-		return pr != null ? pr.isEnabled() : false;
-	}
-
+	/**
+	 * Toggles redirect enabled/disabled state. Persisted immediately, as it's used for the redirects listing.
+	 * 
+	 * @param site the site the affected redirect belongs to
+	 * @param name the name of the redirect to be enabled/disabled
+	 */
 	public void toggleEnabled(String site, String name) {
 		System.out.println("[EditRedirectBean] '" + getName() + "' toggleEnabled(" + site + ", " + name +")");
 		try {
@@ -133,6 +135,63 @@ public class EditRedirectBean implements Serializable {
 		toggleEnabled(site, name);
 	}
 
+	/**
+	 * After editing a redirect, save/persist it.
+	 * 
+	 * @return
+	 */
+	public String saveRedirect() {
+		System.out.println("[EditRedirectBean] '" + getName() + "' saveRedirect()");
+
+		try {
+			cfg = ds.getPortalConfig(site);
+			for (PortalRedirect pr : cfg.getPortalRedirects()) {
+				if (pr.getName().equals(name)) {
+					ds.save(cfg);
+					isEdit = false;
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * After editing a redirect, cancel it's changes.
+	 * Method restores the redirect state, name, conditions, mappings, etc to it's backup state.
+	 * TODO: Try to clone the entire redirect for backup.
+	 */
+	public void rollbackRedirect() {
+		isEdit = false;
+		System.out.println("[EditRedirectBean] '" + getName() + "' rollbackRedirect()");
+	}
+
+	// ----- REDIRECT ENABLED, NAME & SITE -----
+	
+	/**
+	 * Sets the enabled/disabled state of a redirect, in edit mode. As it is in edit mode, it is not persisted as in 
+	 * {{@link #toggleEnabled(String, String)}, since it can be canceled.
+	 * 
+	 * @param enabled the value to set the enabled property
+	 */
+	public void setEnabled(boolean enabled) {
+		System.out.println("[EditRedirectBean] '" + getName() + "' setEnabled(" + enabled + ")");
+		pr.setEnabled(enabled);
+	}
+
+	/**
+	 * Getter for the redirect enabled property, indicating if the redirect is active or not.
+	 * 
+	 * @return a boolean indicating the redirect enabled property
+	 */
+	public boolean getEnabled() {
+		System.out.println("[EditRedirectBean] '" + getName() + "' isEnabled() = " + enabled);
+		return pr != null ? pr.isEnabled() : false;
+	}
+
 	public String getRedirectSite() {
 		return redirectSite;
 	}
@@ -144,26 +203,33 @@ public class EditRedirectBean implements Serializable {
 	// ----- CONDITIONS -----
 
 	public ArrayList<RedirectCondition> getConditions() {
-		return conditions;
+		return pr != null ? pr.getConditions() : new ArrayList<RedirectCondition>();
 	}
 
 	public void setConditions(ArrayList<RedirectCondition> conditions) {
-		this.conditions = conditions;
+		pr.setConditions(conditions);
 	}
 
 	// current condition being edited
 	private int currentConditionIndex;
 	private RedirectCondition editedCondition;
 
+	private ArrayList<String> backupContains;
+	private ArrayList<String> backupDoesNotContain;
+	private ArrayList<DevicePropertyCondition> backupDeviceProperties;
+	
+	private boolean conditionsChanged = false;
+	private boolean isNewCondition = false;
+
 	private String site;
 
 	public int getCurrentConditionIndex() {
-		// System.out.println("[EditRedirectBean] getCurrentConditionIndex() = " + currentConditionIndex);
+		System.out.println("[EditRedirectBean] getCurrentConditionIndex() = " + currentConditionIndex);
 		return currentConditionIndex;
 	}
 
 	public void setCurrentConditionIndex(int currentConditionIndex) {
-		// System.out.println("[EditRedirectBean] setCurrentConditionIndex(" + currentConditionIndex + ")");
+		System.out.println("[EditRedirectBean] setCurrentConditionIndex(" + currentConditionIndex + ")");
 		this.currentConditionIndex = currentConditionIndex;
 	}
 
@@ -175,7 +241,168 @@ public class EditRedirectBean implements Serializable {
 	public void setEditedCondition(RedirectCondition editedCondition) {
 		// System.out.println("[EditRedirectBean] setEditedCondition(" + editedCondition + ")");
 		this.editedCondition = editedCondition;
+		this.backupContains = new ArrayList<String>(editedCondition.getUserAgentConditions().getContains());
+		this.backupDoesNotContain = new ArrayList<String>(editedCondition.getUserAgentConditions().getDoesNotContain());
+		this.backupDeviceProperties = editedCondition.getDeviceProperties() == null ? new ArrayList<DevicePropertyCondition>() : 
+			new ArrayList<DevicePropertyCondition>(editedCondition.getDeviceProperties());
+		this.conditionsChanged = false;
 	}
+
+	public ArrayList<String> getContains(String condition) {
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' getContains(" + condition + ")");
+		return editedCondition.getUserAgentConditions().getContains();
+	}
+
+	public void addCondition() {
+		System.out.println("[EditRedirectBean] addCondition()");
+		this.editedCondition = createNewCondition();
+		isNewCondition = true;
+	}
+	
+	/**
+	 * Creates a new redirect condition, sanitizing the initial values, as they are set to null instead of empty ArrayLists, etc.
+	 * 
+	 * @return
+	 */
+	private RedirectCondition createNewCondition() {
+		RedirectCondition newRC = new RedirectCondition();
+		newRC.setName("");
+		newRC.setDeviceProperties(new ArrayList<DevicePropertyCondition>());
+		UserAgentConditions newUAC = new UserAgentConditions();
+		newUAC.setContains(new ArrayList<String>());
+		newUAC.setDoesNotContain(new ArrayList<String>());
+		newRC.setUserAgentConditions(newUAC);
+
+		return newRC;
+	}
+
+	/**
+	 * Adds a new "CONTAINS" entry to the edited condition.
+	 */
+	public void addContains() {
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' addContains()");
+		editedCondition.getUserAgentConditions().getContains().add("");
+		conditionsChanged = true;
+	}
+
+	/**
+	 * Removes a "CONTAINS" entry from the edited condition.
+	 * @param index the index of the entry to remove
+	 */
+	public void removeContains(Integer index) {
+		String rc = editedCondition.getUserAgentConditions().getContains().remove((int)index);
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' removeContains(" + index + ") = '" + rc + "'");
+		conditionsChanged = true;
+	}
+
+	/**
+	 * Adds a new "DOES NOT CONTAIN" entry to the edited condition.
+	 */
+	public void addDoesNotContain() {
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' addContains()");
+		editedCondition.getUserAgentConditions().getDoesNotContain().add("");
+		conditionsChanged = true;
+	}
+
+	/**
+	 * Removes a "DOES NOT CONTAIN" entry from the edited condition.
+	 * @param index the index of the entry to remove
+	 */
+	public void removeDoesNotContain(Integer index) {
+		String rc = editedCondition.getUserAgentConditions().getDoesNotContain().remove((int)index);
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' removeContains(" + index + ") = '" + rc + "'");
+		conditionsChanged = true;
+	}
+
+	public boolean getConditionsChanged() {
+		System.out.println("[EditRedirectBean] '" + getName() + "' getConditionsChanged()");
+		return conditionsChanged;
+	}
+
+	/**
+	 * After editing a condition, save it.
+	 * Method does nothing, as all changes should be already present in the object.
+	 * 
+	 * @return
+	 */
+	public String saveCondition() {
+		System.out.println("[EditRedirectBean] '" + getName() + "' saveCondition()");
+		if(isNewCondition) {
+			System.out.println("[EditRedirectBean] '" + getName() + "' saveCondition() : Adding New Condition '" + editedCondition.getName() + "'");
+			this.pr.getConditions().add(editedCondition);
+			isNewCondition = false;
+			conditionsChanged = false;
+		}
+		return null;
+	}
+	
+	/**
+	 * After editing a condition, cancel it's changes.
+	 * Method restores the conditions, properties, etc to it's backup state.
+	 * TODO: Try to clone the entire condition for backup.
+	 */
+	public void rollbackCondition() {
+		System.out.println("[EditRedirectBean] '" + getName() + "' rollbackCondition()");
+		if(!isNewCondition) {
+			this.editedCondition.getUserAgentConditions().setContains(backupContains);
+			this.editedCondition.getUserAgentConditions().setDoesNotContain(backupDoesNotContain);
+			this.editedCondition.setDeviceProperties(backupDeviceProperties);
+		}
+	}
+	
+	// ----- PROPERTIES -----
+
+	/**
+	 * Adds a new Device Property to the edited condition.
+	 */
+	public void addProperty() {
+		System.out.println("[EditRedirectBean] addProperty()");
+		if (editedCondition.getDeviceProperties() == null) {
+			editedCondition.setDeviceProperties(new ArrayList<DevicePropertyCondition>());
+		}
+
+		editedCondition.getDeviceProperties().add(new DevicePropertyCondition());
+	}
+
+	/**
+	 * Removes a Device Property entry from the edited condition.
+	 * @param index the index of the entry to remove
+	 */
+	public void removeProperty(Integer index) {
+		DevicePropertyCondition rc = editedCondition.getDeviceProperties().remove((int)index);
+		System.out.println("[EditRedirectBean] '" + editedCondition.getName() + "' removeProperty(" + index + ") = '" + rc + "'");
+		conditionsChanged = true;
+	}
+
+	/**
+	 * Gets the proper operator to be shown at property editor, mapping it to the &lt;select&gt; element.
+	 * 
+	 * @param index the index of the entry to get the operator from
+	 * @return a string value representing the operator (mt for matches, bt for between, gt for greater-than,
+	 *         lt for less-than and eq for equals)
+	 */
+	public String getPropertyOperator(int index) {
+		System.out.println("[EditRedirectBean] getPropertyOperator(" + index + ")");
+		DevicePropertyCondition dp = editedCondition.getDeviceProperties().get(index);
+		if (dp.getMatches() != null && !dp.getMatches().trim().isEmpty()) {
+			return "mt";
+		}
+		else if (dp.getGreaterThan() != null && dp.getLessThan() != null && dp.getGreaterThan() != 0.0  && dp.getLessThan() != 0.0) {
+			return "bt";
+		}
+		else if (dp.getGreaterThan() != null || dp.getGreaterThan() != 0.0) {
+			return "gt";
+		}
+		else if (dp.getLessThan() != null || dp.getLessThan() != 0.0) {
+			return "lt";
+		}
+		else {
+			return "eq";
+		}
+		//return dp.getMatches() != null ? "mt" : dp.getGreaterThan() != null ? (dp.getLessThan() != null ? "bt" : "gt") : dp.getLessThan() != null ? "lt" : "eq";
+	}
+
+	// ----- MAPPINGS -----
 
 	public RedirectMappings getMappings() {
 		return mappings;
@@ -206,9 +433,9 @@ public class EditRedirectBean implements Serializable {
 					this.name = pr.getName();
 					this.enabled = pr.isEnabled();
 					this.redirectSite = pr.getRedirectSite();
-					this.conditions = pr.getConditions();
 					this.mappings = pr.getMappings();
 					System.out.println("[EditRedirectBean] loaded successfully");
+					isEdit = true;
 					return;
 				}
 			}

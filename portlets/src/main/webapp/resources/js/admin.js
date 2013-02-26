@@ -81,9 +81,19 @@ function removeProperty(element) {
 	init();
 }
 
-function propertyFields(element) {
+function changePropertyFields(element) {
 	// Change input box(es) according to selected option
-	$(element).next().html($('.tt-' + $(element).val()).html());
+	$(element).next().children().each(function() {
+		otherInput = $(this).children().children();
+		otherInput.val("");
+		otherInput.prop('disabled', true);
+		$(this).hide();
+	});
+	curInputWrapper = $(element).next().children('.pp-' + $(element).val());
+	curInput = curInputWrapper.children().children();
+	curInput.prop('disabled', false);
+	curInputWrapper.show();
+	curInput.first().focus();
 }
 
 function addMappingEntry() {
@@ -268,9 +278,6 @@ bootstrapModal = function() {
 		}, 50)
 		$('#modal-select-node').modal('hide');
 		return false;
-	});
-	$('.add-condition').click(function() {
-		$('#modal-condition').modal();
 	});
 	$('#create-group').click(function() {
 		$('#modal-create-group').modal();
