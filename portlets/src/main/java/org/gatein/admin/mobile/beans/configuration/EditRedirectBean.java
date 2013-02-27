@@ -33,6 +33,7 @@ import javax.faces.context.FacesContext;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.DevicePropertyCondition;
+import org.exoplatform.portal.config.model.NodeMap;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.RedirectCondition;
@@ -60,11 +61,16 @@ public class EditRedirectBean implements Serializable {
 	
 	protected PortalRedirect pr;
 
+	// So we keep a reference to redirects with updated name
+	protected String originalName;
+
 	protected String name;
 	protected boolean enabled;
 	protected String redirectSite;
 
 	protected RedirectMappings mappings;
+
+	private boolean isNewRedirect;
 
 	/**
 	 * Sets the name of the Redirect to be edited.
@@ -79,6 +85,18 @@ public class EditRedirectBean implements Serializable {
 		name = rname;
 	}
 
+	public void addRedirect(String site) {
+		System.out.println("[EditRedirectBean] '" + getName() + "' addRedirect()");
+		this.site = site;
+		this.pr = new PortalRedirect();
+		this.pr.setConditions(new ArrayList<RedirectCondition>());
+		RedirectMappings rm = new RedirectMappings();
+		rm.setMappings(new ArrayList<NodeMap>());
+		this.pr.setMappings(rm);
+		this.mappings = pr.getMappings();
+		isNewRedirect = true;
+	}
+	
 	/**
 	 * Returns the name of the redirect being edited.
 	 * 
@@ -86,7 +104,7 @@ public class EditRedirectBean implements Serializable {
 	 */
 	public String getName() {
 		// System.out.println("[EditRedirectBean] getName() = " + name);
-		return name;
+		return this.pr != null ? this.pr.getName() : name;
 	}
 
 	/**
@@ -95,8 +113,10 @@ public class EditRedirectBean implements Serializable {
 	 */
 	public void setName(String name) {
 		// System.out.println("[EditRedirectBean] setName(" + name + ")");
+		if(this.pr != null) {
+			this.pr.setName(name);
+		}
 		this.name = name;
-		this.isEdit = true;
 	}
 
 	/**
@@ -106,7 +126,7 @@ public class EditRedirectBean implements Serializable {
 	 * @param name the name of the redirect to be enabled/disabled
 	 */
 	public void toggleEnabled(String site, String name) {
-		System.out.println("[EditRedirectBean] '" + getName() + "' toggleEnabled(" + site + ", " + name +")");
+		System.out.println("[EditRedirectBean] '" + getName() + "' toggleEnabled(" + site + ", " + name + ")");
 		try {
 			// FIXME: Use webui Util.getUIPortal();
 			if (ds == null) {
@@ -135,6 +155,49 @@ public class EditRedirectBean implements Serializable {
 		toggleEnabled(site, name);
 	}
 
+	public String deleteRedirect(String site, String name) {
+		System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect(" + site + ", " + name + ")");
+
+		try {
+			// FIXME: Use webui Util.getUIPortal();
+			if (ds == null) {
+				ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
+			}
+
+			cfg = ds.getPortalConfig(site);
+			ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
+			
+			int index = -1;
+			for (int i = 0; i < redirects.size(); i++) {
+				if (redirects.get(i).getName().equals(name)) {
+					index = i;
+					System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Found redirect at index " + index);
+					break;
+				}
+			}
+			
+			if (index != -1) {
+				redirects.remove(index);
+				// System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Size = " + redirects.size() + ".");
+				cfg.setPortalRedirects(redirects);
+				// System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Size = " + cfg.getPortalRedirects().size() + ".");
+				ds.save(cfg);
+				 System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Size = " + cfg.getPortalRedirects().size() + ".");
+				// cfg = ds.getPortalConfig(site);
+				// System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Size = " + cfg.getPortalRedirects().size() + ".");
+				System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Redirect deleted.");
+			}
+			else {
+				System.out.println("[EditRedirectBean] '" + getName() + "' deleteRedirect() // Redirect not found or deleted.");
+			}
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * After editing a redirect, save/persist it.
 	 * 
@@ -144,21 +207,51 @@ public class EditRedirectBean implements Serializable {
 		System.out.println("[EditRedirectBean] '" + getName() + "' saveRedirect()");
 
 		try {
+			// FIXME: Use webui Util.getUIPortal();
+			if (ds == null) {
+				ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
+			}
+
 			cfg = ds.getPortalConfig(site);
-			for (PortalRedirect pr : cfg.getPortalRedirects()) {
-				if (pr.getName().equals(name)) {
-					ds.save(cfg);
-					isEdit = false;
-					return null;
+			ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
+			
+			boolean save = false;
+			if(isNewRedirect) {
+				redirects.add(pr);
+				save = true;
+			}
+			else {
+				int index = -1;
+				for (int i = 0; i < redirects.size(); i++) {
+					if (redirects.get(i).getName().equals(originalName)) {
+						index = i;
+						System.out.println("[EditRedirectBean] '" + getName() + "' saveRedirect() // Found redirect at index " + index);
+						break;
+					}
+				}
+				if (index != -1) {
+					redirects.set(index, this.pr);
+					save = true;
 				}
 			}
-		} catch (Exception e) {
+			
+			if (save) {
+				cfg.setPortalRedirects(redirects);
+				ds.save(cfg);
+				isNewRedirect = false;
+				System.out.println("[EditRedirectBean] '" + getName() + "' saveRedirect() // Redirect updated and saved.");
+			}
+			else {
+				System.out.println("[EditRedirectBean] '" + getName() + "' saveRedirect() // Redirect not found or saved.");
+			}
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * After editing a redirect, cancel it's changes.
 	 * Method restores the redirect state, name, conditions, mappings, etc to it's backup state.
@@ -193,11 +286,13 @@ public class EditRedirectBean implements Serializable {
 	}
 
 	public String getRedirectSite() {
-		return redirectSite;
+		System.out.println("[EditRedirectBean] getRedirectSite()");
+		return this.pr != null ? this.pr.getRedirectSite() : null;
 	}
 
 	public void setRedirectSite(String redirectSite) {
-		this.redirectSite = redirectSite;
+		System.out.println("[EditRedirectBean] setRedirectSite(" + redirectSite + ")");
+		this.pr.setRedirectSite(redirectSite);
 	}
 
 	// ----- CONDITIONS -----
@@ -404,6 +499,28 @@ public class EditRedirectBean implements Serializable {
 
 	// ----- MAPPINGS -----
 
+	public void addNodeMapping() {
+		System.out.println("[EditRedirectBean] addNodeMapping()");
+		this.pr.getMappings().getMappings().add(0, new NodeMap());
+		System.out.println("@@@" + this.pr.getMappings().getMap().size());
+	}
+
+	public void removeNodeMapping(int index) {
+		System.out.println("[EditRedirectBean] removeNodeMapping(" + index + ")");
+		ArrayList<NodeMap> mappings = this.pr.getMappings().getMappings();
+		mappings.remove(index);
+		this.pr.getMappings().setMappings(mappings);
+		System.out.println("@@@" + this.pr.getMappings().getMap().size());
+	}
+
+	public boolean getUseNodeNameMatching() {
+		return (this.pr != null && this.pr.getMappings() != null) ? this.pr.getMappings().isUseNodeNameMatching() : false;
+	}
+	
+	public void setUseNodeNameMatching(boolean useNodeNameMatching) {
+		this.pr.getMappings().setUseNodeNameMatching(useNodeNameMatching);
+	}
+	
 	public RedirectMappings getMappings() {
 		return mappings;
 	}
@@ -416,6 +533,7 @@ public class EditRedirectBean implements Serializable {
 
 	public void load(String site, String redirect) {
 		System.out.println("[EditRedirectBean] load(" + site + ", " + redirect + ")");
+		isNewRedirect = false;
 
 		this.site = site;
 
@@ -431,6 +549,7 @@ public class EditRedirectBean implements Serializable {
 				if (pr.getName().equals(redirect)) {
 					this.pr = pr;
 					this.name = pr.getName();
+					this.originalName = pr.getName();
 					this.enabled = pr.isEnabled();
 					this.redirectSite = pr.getRedirectSite();
 					this.mappings = pr.getMappings();

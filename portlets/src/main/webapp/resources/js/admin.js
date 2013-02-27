@@ -459,7 +459,7 @@ feedback = function() {
 editRedirect = function() {
 
 	// Fade out summary or initial and fade in edit on "Add Redirect" button click
-	$('#add-redirect').click(function(){
+	$('.add-redirect').click(function(){
 		$('#add-redirect').attr("disabled", "disabled");
 
 		// fade summary out (if present)...
@@ -484,7 +484,7 @@ editRedirect = function() {
 		$('.redirect-summary').fadeOut(300, function() {
 			// .. and when done, fade config in
 			$('.edit-group').fadeIn(300)
-		});		
+		});
 	});
 	
 	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
@@ -492,8 +492,8 @@ editRedirect = function() {
 		$(".edit-group").hide();
 	});
 
-	// On "Cancel" or "Save Changes" hide the edit form and show the summary
-	$('#edit_save-changes, #edit_cancel').click(function(){
+	// On "Cancel" hide the edit form and show the summary
+	$('#edit_cancel').click(function(){
 		$('.edit-group').fadeOut(300, function() {
 			$('.redirect-summary').fadeIn(300)
 		});
@@ -506,6 +506,13 @@ editRedirect = function() {
 	});
 	
 };
+
+function closeRedirectEdit() {
+	$('.edit-group').fadeOut(300, function() {
+		$('.redirect-summary').fadeIn(300)
+	});
+	$('#add-redirect').removeAttr("disabled");
+}
 
 /*
 // Anchor animation
