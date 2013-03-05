@@ -355,6 +355,16 @@ public class EditRedirectBean implements Serializable {
 	}
 	
 	/**
+	 * Removes a Redirect Condition entry from the edited redirect.
+	 * @param index the index of the entry to remove
+	 */
+	public void removeCondition(Integer index) {
+		System.err.println("[EditRedirectBean] '" + getName() + "' removeCondition(" + index + ")");
+		RedirectCondition rc = pr.getConditions().remove((int) index);
+		System.out.println("[EditRedirectBean] '" + getName() + "' removeCondition(" + index + ") = '" + rc + "'");
+	}
+	
+	/**
 	 * Creates a new redirect condition, sanitizing the initial values, as they are set to null instead of empty ArrayLists, etc.
 	 * 
 	 * @return
@@ -502,7 +512,6 @@ public class EditRedirectBean implements Serializable {
 	public void addNodeMapping() {
 		System.out.println("[EditRedirectBean] addNodeMapping()");
 		this.pr.getMappings().getMappings().add(0, new NodeMap());
-		System.out.println("@@@" + this.pr.getMappings().getMap().size());
 	}
 
 	public void removeNodeMapping(int index) {
@@ -510,7 +519,6 @@ public class EditRedirectBean implements Serializable {
 		ArrayList<NodeMap> mappings = this.pr.getMappings().getMappings();
 		mappings.remove(index);
 		this.pr.getMappings().setMappings(mappings);
-		System.out.println("@@@" + this.pr.getMappings().getMap().size());
 	}
 
 	public boolean getUseNodeNameMatching() {

@@ -12,13 +12,13 @@
 				<li id="sites"> <!-- Sites List / begin -->
 					<div>
 						<span class="toggle">Sites</span>
-						<span class="more">Show more</span>
+						<h:panelGroup styleClass="more" rendered="#{mr.sites.size() > 4}">Show more</h:panelGroup>
 					</div>
 					<ul>
-						<ui:repeat value="#{mr.sites}" var="s">
-							<li class="dropdown #{mr.siteName == s.name ? 'active' : ''}">
-								<h:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" >
-									<f:ajax event="action" render="@form :sum_form" />
+						<ui:repeat value="#{mr.sites}" var="s" varStatus="counter">
+							<li class="dropdown #{mr.siteName == s.name ? 'active' : ''} #{counter.index > 3 ? 'extra hidden-element' : ''}">
+								<h:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();">
+									<f:ajax event="action" render="@form :sum_form :add_form" />
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</h:commandLink>
 								<ui:fragment rendered="#{mr.siteName == s.name}">
@@ -28,7 +28,7 @@
 										<li><a href="#">Layout</a></li>
 										<li><a href="#">Pages and Navigation</a></li>
 										-->
-										<li class="active"><a href="#">Mobile Redirects</a></li>
+										<li class="active"><a href="#">Redirects</a></li>
 									</ul>
 								</ui:fragment>
                                 <span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>

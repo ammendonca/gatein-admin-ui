@@ -49,7 +49,7 @@ public class MobileRedirectBean implements Serializable {
 
 	public String getSiteName() {
 		// System.out.println("Getting Site Name: '" + siteName + "'");
-		return siteName != null ? siteName : "Olympicz Site";
+		return siteName;
 	}
 
 	public void setSiteName(String siteName) {

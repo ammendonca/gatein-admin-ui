@@ -3,13 +3,13 @@ $(document).ready(function(){
 });
 
 // because when we get new content through ajax, it needs to be initialized too...
-$(window).load(function () {
-	jsf.ajax.addOnEvent(function(data) {
-		if (data.status === 'success') {
-			init();
-		}
-	});
-});
+// $(window).load(function () {
+// 	jsf.ajax.addOnEvent(function(data) {
+// 		if (data.status === 'success') {
+// 			init();
+// 		}
+// 	});
+// });
 
 function init() {
 	// Bootstrap js
@@ -52,7 +52,6 @@ function addUAString(element) {
 	// $(element).removeAttr("data-original-title");
 	// $(element).removeAttr('onclick');
 	$(element).hide();
-	init();
 }
 
 function removeUAString(element) {
@@ -63,14 +62,12 @@ function removeUAString(element) {
 	parent = $(element).closest('div.more-condition').parent();
 	$(element).closest('div.more-condition').remove();
 	parent.children('div:last').find('button.add-user-agent-string').show();
-	init();
 }
 
 function addProperty(element) {
 	$(element).closest('tbody').append($('tbody.tt-pp').html());
 	$(element).closest('tbody').children('tr:last').children('input').focus();
 	$(element).hide();
-	init();
 }
 
 function removeProperty(element) {
@@ -78,7 +75,6 @@ function removeProperty(element) {
 	parent = $(element).closest('tr.more-property').parent();
 	$(element).closest('tr.more-property').remove();
 	parent.children('tr:last').find('button.add-property').show();
-	init();
 }
 
 function changePropertyFields(element) {
@@ -263,6 +259,7 @@ bootstrapModal = function() {
 	$('.select-node').click(function() {
 		nodeInput = $(this).parent().children("input");
 		$('#modal-select-node').modal();
+		$('.radio-node').first().click()
 		// Allow double click
 		$('.radio-node').parent("label").dblclick(function() {
 			$('#button-select-node').click();
@@ -313,7 +310,7 @@ toggleContent = function() {
 
 // Show / Hide More
 showHideMore = function() {
-	$('nav .more').click(function() {
+	$('nav .more').on('click', function() {
 		$(this).text($(this).text() == "Show more" ? "Hide more" : "Show more");
 		$(this).parent().next('ul').find('.extra').toggleClass('hidden-element');	
 	});
@@ -460,7 +457,7 @@ editRedirect = function() {
 
 	// Fade out summary or initial and fade in edit on "Add Redirect" button click
 	$('.add-redirect').click(function(){
-		$('#add-redirect').attr("disabled", "disabled");
+		$('.add-redirect').css("visibility", "hidden");
 
 		// fade summary out (if present)...
 		$('.redirect-summary').fadeOut(300, function() {
@@ -477,8 +474,8 @@ editRedirect = function() {
 	});
 
 	// Fade out summary and fade in edit on "Configure" link click
-	$('.configure-redirect').click(function(){
-		$('#add-redirect').attr("disabled", "disabled");
+	$('.configure-redirect').live('click', function(){
+		$('.add-redirect').css("visibility", "hidden");
 
 		// fade summary out...
 		$('.redirect-summary').fadeOut(300, function() {
@@ -488,7 +485,7 @@ editRedirect = function() {
 	});
 	
 	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
-	$('.site-link').click(function(){
+	$('.site-link').live('click', function(){
 		$(".edit-group").hide();
 	});
 
@@ -497,7 +494,7 @@ editRedirect = function() {
 		$('.edit-group').fadeOut(300, function() {
 			$('.redirect-summary').fadeIn(300)
 		});
-		$('#add-redirect').removeAttr("disabled");
+		$('.add-redirect').css("visibility", "visible");
 	});
 
 	$('#modal-delete-redirect .btn-primary').click(function(){
@@ -511,7 +508,7 @@ function closeRedirectEdit() {
 	$('.edit-group').fadeOut(300, function() {
 		$('.redirect-summary').fadeIn(300)
 	});
-	$('#add-redirect').removeAttr("disabled");
+	$('.add-redirect').css("visibility", "visible");
 }
 
 /*

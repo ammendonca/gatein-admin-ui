@@ -163,6 +163,7 @@ td.actions {
 	padding-right: 20px;
 }
 
+/* ammendonca: Disabling hover action, not touch friendly
 td.actions > a,
 td.actions > button,
 td.actions > div {visibility: hidden}
@@ -170,6 +171,7 @@ td.actions > div {visibility: hidden}
 tr:hover > td.actions > a,
 tr:hover > td.actions > button,
 tr:hover > td.actions > div {visibility: visible;}
+*/
 
 td.actions button {display: inline-block;}
 
@@ -395,7 +397,9 @@ aside {
     position: absolute;
     top: 5px;
     right: 10px;
+    /* ammendonca: Disabling hover action, not touch friendly
     visibility: hidden;
+    */
     cursor: pointer;
 }
 
@@ -516,7 +520,8 @@ aside .actions #add-space:hover a {
 	/*margin-top: 40px;*/
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
 	min-height: 750px;
-	width: 700px;
+	/*width: 700px;*/
+	width: 680px;
 	background-color: #fff;
 	top: -20px;
 	right: 14px;
@@ -1092,15 +1097,19 @@ span.td-condition {
 #condition-string input {width: 280px;}
 
 #condition-string div div {
+	/* ammendonca: Disabling hover action, not touch friendly
 	visibility: hidden;
+	*/
 	float: right;
 	margin-right: 10px;
 	margin-top: 5px;
 }
 
+/* ammendonca: Disabling hover action, not touch friendly
 #condition-string div:hover div a,
 #condition-string div:hover div button
  {visibility: visible;}
+*/
 
 #condition-string button+button,
 #condition-string a+a,
