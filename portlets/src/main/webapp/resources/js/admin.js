@@ -456,7 +456,7 @@ feedback = function() {
 editRedirect = function() {
 
 	// Fade out summary or initial and fade in edit on "Add Redirect" button click
-	$('.add-redirect').click(function(){
+	$('.add-redirect').live('click', function(){
 		$('.add-redirect').css("visibility", "hidden");
 
 		// fade summary out (if present)...
