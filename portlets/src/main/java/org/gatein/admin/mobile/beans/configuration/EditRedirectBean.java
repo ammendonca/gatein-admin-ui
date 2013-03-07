@@ -24,6 +24,8 @@ package org.gatein.admin.mobile.beans.configuration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
@@ -39,6 +41,10 @@ import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.RedirectCondition;
 import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.config.model.UserAgentConditions;
+import org.gatein.api.PortalRequest;
+import org.gatein.api.navigation.Node;
+import org.gatein.api.navigation.Nodes;
+import org.gatein.api.site.SiteId;
 
 @ManagedBean(name = "rdrEdit")
 @ViewScoped
@@ -64,7 +70,7 @@ public class EditRedirectBean implements Serializable {
 	// So we keep a reference to redirects with updated name
 	protected String originalName;
 
-	protected String name;
+	protected String redirectName;
 	protected boolean enabled;
 	protected String redirectSite;
 
@@ -82,12 +88,12 @@ public class EditRedirectBean implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String rname = params.get("rname");
 		// System.out.println("[EditRedirectBean] configRedirect() @ got parameter rname = '" + rname + "'");
-		name = rname;
+		redirectName = rname;
 	}
 
 	public void addRedirect(String site) {
 		System.out.println("[EditRedirectBean] '" + getName() + "' addRedirect()");
-		this.site = site;
+		this.siteName = site;
 		this.pr = new PortalRedirect();
 		this.pr.setConditions(new ArrayList<RedirectCondition>());
 		RedirectMappings rm = new RedirectMappings();
@@ -104,7 +110,7 @@ public class EditRedirectBean implements Serializable {
 	 */
 	public String getName() {
 		// System.out.println("[EditRedirectBean] getName() = " + name);
-		return this.pr != null ? this.pr.getName() : name;
+		return this.pr != null ? this.pr.getName() : redirectName;
 	}
 
 	/**
@@ -116,7 +122,7 @@ public class EditRedirectBean implements Serializable {
 		if(this.pr != null) {
 			this.pr.setName(name);
 		}
-		this.name = name;
+		this.redirectName = name;
 	}
 
 	/**
@@ -152,7 +158,7 @@ public class EditRedirectBean implements Serializable {
 
 	public void toggleEnabled() {
 		System.out.println("[EditRedirectBean] '" + getName() + "' toggleEnabled()");
-		toggleEnabled(site, name);
+		toggleEnabled(siteName, redirectName);
 	}
 
 	public String deleteRedirect(String site, String name) {
@@ -212,9 +218,12 @@ public class EditRedirectBean implements Serializable {
 				ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
 			}
 
-			cfg = ds.getPortalConfig(site);
+			cfg = ds.getPortalConfig(siteName);
 			ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
-			
+			// FIXME: getPortalRedirects() should return empty list instead of null
+			if (redirects == null) {
+				redirects = new ArrayList<PortalRedirect>();
+			}
 			boolean save = false;
 			if(isNewRedirect) {
 				redirects.add(pr);
@@ -316,7 +325,16 @@ public class EditRedirectBean implements Serializable {
 	private boolean conditionsChanged = false;
 	private boolean isNewCondition = false;
 
-	private String site;
+	private String siteName;
+
+	// holds selected node mapping site option 
+	private String nodesSiteName;
+	// holds origin node names
+	private List<String> originNodeNames = new ArrayList<String>();
+	// holds redirect node names
+	private List<String> redirectNodeNames = new ArrayList<String>();
+	// copy of either origin or redirect node names, depending on selection
+	private List<String> currentNodeNames = new ArrayList<String>();
 
 	public int getCurrentConditionIndex() {
 		System.out.println("[EditRedirectBean] getCurrentConditionIndex() = " + currentConditionIndex);
@@ -536,6 +554,51 @@ public class EditRedirectBean implements Serializable {
 	public void setMappings(RedirectMappings mappings) {
 		this.mappings = mappings;
 	}
+	
+	/**
+	 * Returns the list of Portal nodes for the origin.
+	 * @return a List of Strings representing node paths
+	 */
+	public List<String> getOriginNodeNames() {
+		return this.originNodeNames;
+	}
+
+	/**
+	 * Returns the list of Portal nodes for the redirect.
+	 * @return a List of Strings representing node paths
+	 */
+	public List<String> getRedirectNodeNames() {
+		return this.redirectNodeNames;
+	}
+
+	/**
+	 * Returns the name of the Portal site for the selected option (origin or redirect) by {@link #setCurrentNodeNames(boolean)}.
+	 * @return
+	 */
+	public String getCurrentNodesSiteName() {
+		return nodesSiteName;
+	}
+
+	/**
+	 * Returns the list of Portal nodes for the selected option (origin or redirect) by {@link #setCurrentNodeNames(boolean)}.
+	 * @return
+	 */
+	public List<String> getCurrentNodeNames() {
+		System.out.println("[EditRedirectBean] getCurrentNodeNames returning " + Arrays.toString(originNodeNames.toArray()));
+		return currentNodeNames;
+	}
+
+	public void setCurrentNodeNames(boolean isOrigin) {
+		System.out.println("[EditRedirectBean] setCurrentNodeNames(" + isOrigin + ")");
+		if (isOrigin) {
+			this.currentNodeNames = originNodeNames;
+			this.nodesSiteName = siteName;
+		}
+		else {
+			this.currentNodeNames = redirectNodeNames;
+			this.nodesSiteName = redirectSite;
+		}
+	}
 
 	// --- Utilities ----------------------------------------------------------
 
@@ -543,7 +606,7 @@ public class EditRedirectBean implements Serializable {
 		System.out.println("[EditRedirectBean] load(" + site + ", " + redirect + ")");
 		isNewRedirect = false;
 
-		this.site = site;
+		this.siteName = site;
 
 		// FIXME: Use webui Util.getUIPortal();
 		if (ds == null) {
@@ -556,11 +619,13 @@ public class EditRedirectBean implements Serializable {
 			for (PortalRedirect pr : cfg.getPortalRedirects()) {
 				if (pr.getName().equals(redirect)) {
 					this.pr = pr;
-					this.name = pr.getName();
+					this.redirectName = pr.getName();
 					this.originalName = pr.getName();
 					this.enabled = pr.isEnabled();
 					this.redirectSite = pr.getRedirectSite();
 					this.mappings = pr.getMappings();
+					this.originNodeNames = loadOriginNodes(site);
+					this.redirectNodeNames = loadRedirectNodes();
 					System.out.println("[EditRedirectBean] loaded successfully");
 					isEdit = true;
 					return;
@@ -572,4 +637,47 @@ public class EditRedirectBean implements Serializable {
 		}
 		System.out.println("[EditRedirectBean] did not load");
 	}
+
+	// TODO: move this to a different bean
+	public List<String> loadOriginNodes(String siteName) {
+		try {
+			System.out.println("[api] Loading Origin Nodes for '" + siteName + "'");
+			ArrayList<String> nodes = new ArrayList<String>();
+			if (siteName != null) {
+				Node n = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(siteName)).getRootNode(Nodes.visitAll());
+				for (Node node : Nodes.asList(n)) {
+					nodes.add(node.getNodePath().toString());
+				}
+			}
+
+			System.out.println("[api] getNodes returning " + Arrays.toString(nodes.toArray()));
+			return nodes;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<String> loadRedirectNodes() {
+		try {
+			System.out.println("[api] Loading Redirect Nodes for '" + redirectSite + "'");
+			ArrayList<String> nodes = new ArrayList<String>();
+			if (redirectSite != null) {
+				Node n = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(redirectSite)).getRootNode(Nodes.visitAll());
+				for (Node node : Nodes.asList(n)) {
+					nodes.add(node.getNodePath().toString());
+				}
+			}
+
+			System.out.println("[api] loadRedirectNodes() returning " + Arrays.toString(nodes.toArray()));
+			this.redirectNodeNames = nodes;
+			return nodes;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

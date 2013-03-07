@@ -21,7 +21,7 @@
 			</h:panelGroup>
 
 			<!-- Site selected, with no redirects -->
-			<h:panelGroup rendered="#{not empty mr.siteName and mr.redirects.size() == 0}">
+			<h:panelGroup rendered="#{not empty mr.siteName and mr.redirects.size() eq 0}">
 				<h2 class="initial">You have not set up any redirects.</h2>
 				<p class="initial">Redirect to an alternative site based on the device, browser or user preferences.</p>
 				<h:graphicImage class="initial" library="img" name="mobile-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
@@ -106,6 +106,7 @@
 										<div class="controls">
 											<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
 												<f:selectItems value="#{mr.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq mr.siteName}" />
+												<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
 											</h:selectOneMenu>
 										</div>
 									</div><!-- End .control-group -->
@@ -203,17 +204,17 @@
 														<tr class="node-mapping-editor #{empty m.originNode or empty m.redirectNode ? '' : 'hidden-element'}">
 															<td>
 																<b:input scale="medium" placeholder="e.g. homepage" value="#{m.originNode}" styleClass="origin-node-name-input">
-																	<b:autocomplete suggestions="#{mr.nodes}" />
+																	<!-- <b:autocomplete suggestions="#{rdrEdit.originNodeNames}" /> -->
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>
 															<td>
 																<b:input scale="medium" placeholder="e.g. home_page" value="#{m.redirectNode}" styleClass="redirect-node-name-input">
-																	<b:autocomplete suggestions="#{mr.nodes}" />
+																	<!-- <b:autocomplete suggestions="#{rdrEdit.redirectNodeNames}" /> -->
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>

@@ -83,12 +83,18 @@ public class MobileRedirectBean implements Serializable {
 			// System.out.println("Portal Names: " + ds.getAllPortalNames());
 			PortalConfig cfg = ds.getPortalConfig(siteName);
 			r = cfg.getPortalRedirects();
+
+			// FIXME: getPortalRedirects() should return empty list
+			if (r == null) {
+				r = new ArrayList<PortalRedirect>();
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		// System.out.println("Returning " + (r != null ? r.size() : "N/A") + " Redirects.");
+		System.out.println("[MobileRedirectBean] getRedirects() returning " + r.size() + " redirect(s) for '" + siteName + "'.");
 		return r;
 	}
 
@@ -144,31 +150,6 @@ public class MobileRedirectBean implements Serializable {
 				});
 		System.out.println("[mock] Returning " + s.size() + " Sites.");
 		return s;
-	}
-
-	// TODO: move this to a different bean
-	public List<String> getNodes() {
-		// TODO: get from portal
-		ArrayList<String> nodes = new ArrayList<String>();
-		nodes.add("/customers");
-		nodes.add("/organization");
-		nodes.add("/organization/communication");
-		nodes.add("/organization/communication/marketing");
-		nodes.add("/organization/communication/press-and-media");
-		nodes.add("/organization/management");
-		nodes.add("/organization/management/executive-board");
-		nodes.add("/organization/management/human-resources");
-		nodes.add("/organization/operations/operations");
-		nodes.add("/organization/operations/finances");
-		nodes.add("/organization/operations/sales");
-		nodes.add("/organization/operations/partners");
-		nodes.add("/organization/operations/administrators");
-		// nodes.add("/organization/operations/guests");
-		// nodes.add("/organization/operations/users");
-		// nodes.add("/organization/operations/employees");
-		// nodes.add("/organization/operations/managers");
-		// nodes.add("/organization/operations/design");
-		return nodes;
 	}
 
 }

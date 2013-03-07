@@ -17,10 +17,9 @@
 					<ul>
 						<ui:repeat value="#{mr.sites}" var="s" varStatus="counter">
 							<li class="dropdown #{mr.siteName == s.name ? 'active' : ''} #{counter.index > 3 ? 'extra hidden-element' : ''}">
-								<h:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();">
-									<f:ajax event="action" render="@form :sum_form :add_form" />
+								<a4j:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
-								</h:commandLink>
+								</a4j:commandLink>
 								<ui:fragment rendered="#{mr.siteName == s.name}">
 									<ul styleClass="sub-items">
 										<!-- Only Mobile Redirects for now
