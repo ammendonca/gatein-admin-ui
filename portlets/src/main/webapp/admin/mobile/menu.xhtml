@@ -11,7 +11,7 @@
 			<ul class="nav nav-list">
 				<li id="sites"> <!-- Sites List / begin -->
 					<div>
-						<span class="toggle">Sites</span>
+						<span class="toggle">Redirects</span>
 						<h:panelGroup styleClass="more" rendered="#{mr.sites.size() > 4}">Show more</h:panelGroup>
 					</div>
 					<ul>
@@ -20,70 +20,17 @@
 								<a4j:commandLink action="#{mr.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</a4j:commandLink>
-								<ui:fragment rendered="#{mr.siteName == s.name}">
-									<ul styleClass="sub-items">
-										<!-- Only Mobile Redirects for now
-										<li><a href="#">Configuration</a></li>
-										<li><a href="#">Layout</a></li>
-										<li><a href="#">Pages and Navigation</a></li>
-										-->
-										<li class="active"><a href="#">Redirects</a></li>
-									</ul>
-								</ui:fragment>
-                                <span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Export Site</a></li>
-                                    <li class="delete-site separator"><a href="#">Delete Site</a></li>
-                                </ul>
+								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>
+								<ul class="dropdown-menu">
+									<li><a href="#">Export Site</a></li>
+									<li class="delete-site separator"><a href="#">Delete Site</a></li>
+								</ul>
 							</li>
 						</ui:repeat>
-						<!-- No Dummy Sites
-						<h:panelGroup rendered="#{mr.siteName == 'Olympicz Site'}">
-						<li class="active">
-							<a href="#"><i class="icon-globe icon-gray"></i> Olympics Site</a>
-							<ul>
-								<li><a href="#">Configuration</a></li>
-								<li><a href="#">Layout</a></li>
-								<li><a href="#">Pages and Navigation</a></li>
-								<li class="active"><a href="#">Mobile Redirects</a></li>
-							</ul>
-						</li>
-						</h:panelGroup>
-						<h:panelGroup rendered="#{mr.siteName != 'Olympicz Site'}">
-						<li>
-							<a href="#"><i class="icon-globe icon-gray"></i> Olympics Site</a>
-						</li>
-						</h:panelGroup>
-						<li><a href="#"><i class="icon-globe icon-gray"></i> Demo Site *</a></li>
-						<li><a href="#"><i class="icon-globe icon-gray"></i> Third Site *</a></li>
-						<li class="extra hidden-element"><a href="#"><i class="icon-globe icon-gray"></i> Fourth Site *</a></li>
-						<li class="extra hidden-element"><a href="#"><i class="icon-globe icon-gray"></i> Fifth Site *</a></li>
-						<li class="extra hidden-element"><a href="#"><i class="icon-globe icon-gray"></i> Sixth Site *</a></li>
-						<li class="extra hidden-element"><a href="#"><i class="icon-globe icon-gray"></i> Seventh Site *</a></li>
-						-->
 					</ul>
 				</li> <!-- Sites List / end -->
-				<!-- No Spaces for now...
-				<li id="spaces">
-					<div>
-						<span class="toggle">Spaces</span>
-					</div>
-					<ul>
-						<li><a href="#"><i class="icon-asterisk  icon-gray"></i> Users Space</a></li>
-					</ul>
-				</li>
-				-->
 				<li id="server"> <!-- Server Admin List / begin -->
-					<div>
-						<span class="toggle">Server administration</span>
-					</div>
 					<ul>
-						<!-- Only Import Site for now... 
-						<li><a href="#"><i class="icon-users icon-gray"></i> Users and Groups</a></li>
-						<li><a href="#"><i class="icon-briefcase icon-gray"></i> Applications</a></li>
-						<li><a href="#"><i class="icon-wrench icon-gray"></i> Services</a></li>
-						<li><a href="#"><i class="icon-align-justify icon-gray"></i> WSRP</a></li>
-						-->
 						<li><a href="#" class="import-site" id="import-site"><i class="icon-download-alt icon-gray"></i> Import Site</a></li>
 					</ul>
 				</li> <!-- Server Admin List / end -->
