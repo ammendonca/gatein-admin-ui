@@ -140,16 +140,4 @@ public class MobileRedirectBean implements Serializable {
 		return s;
 	}
 
-	// Mock API
-	public List<org.gatein.admin.mobile.mocks.Site> getMockSites() {
-		System.out.println("[mock] Getting Sites");
-		List<org.gatein.admin.mobile.mocks.Site> s = Arrays.asList(
-				new org.gatein.admin.mobile.mocks.Site[] {
-						new org.gatein.admin.mobile.mocks.Site("classic"), 
-						new org.gatein.admin.mobile.mocks.Site("mobile")
-				});
-		System.out.println("[mock] Returning " + s.size() + " Sites.");
-		return s;
-	}
-
 }
