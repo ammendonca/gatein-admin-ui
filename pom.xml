@@ -19,7 +19,7 @@
 
    <properties>
       <version.portlet-bridge>3.2.0.Beta1</version.portlet-bridge>
-      <version.gatein-api-java>1.0.0.Alpha02-SNAPSHOT</version.gatein-api-java>
+      <version.gatein-api-java>1.0.0.Alpha01</version.gatein-api-java>
    </properties>
 
    <modules>
