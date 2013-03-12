@@ -6,16 +6,16 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <artifactId>gatein-mobile-admin-ui-parent</artifactId>
+      <artifactId>gatein-redirect-admin-ui-parent</artifactId>
       <groupId>org.gatein.ui</groupId>
       <version>1.0.0-SNAPSHOT</version>
    </parent>
 
-   <artifactId>gatein-mobile-admin-ui-portlets</artifactId>
+   <artifactId>gatein-redirect-admin-ui-portlets</artifactId>
 
    <packaging>war</packaging>
 
-   <name>GateIn Mobile Admin UI Portlets</name>
+   <name>GateIn Redirect Admin UI Portlets</name>
 
    <properties>
       <org.exoplatform.kernel.version>2.4.1-GA</org.exoplatform.kernel.version>

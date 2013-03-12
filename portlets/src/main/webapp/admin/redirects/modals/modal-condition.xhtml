@@ -17,7 +17,9 @@
 			<p class="subtitle">All fields are required</p>
 			<div class="control-group">
 				<label class="control-label" for="condition_name">Condition Name </label>
-				<b:input styleClass="input-large" id="condition_name" value="#{rdrEdit.editedCondition.name}" placeholder="Condition Name" />
+				<b:input mode="client" styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" placeholder="Condition Name" onkeyup="validateCondition()">
+				</b:input>
+				<h:message id="condition_name-message" for="condition_name" />
 			</div><!-- End .control-group -->
 			<div class="control-group">
 				<h:panelGroup id="uasHolder">
@@ -158,7 +160,7 @@
 		</div><!-- End .modal-body -->
 		<h:panelGroup layout="block" id="condition_footer" styleClass="modal-footer">
 			<b:commandButton value="Cancel" action="#{rdrEdit.rollbackCondition}" oncomplete="$('#modal-condition').modal('hide');" execute="@form" />
-			<b:commandButton value="Save Changes" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group"/>
+			<b:commandButton id="save-condition-button" value="Save Changes!" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" />
 		</h:panelGroup>
 	</h:panelGroup><!-- end .modal -->
 	</div><!-- end .modal -->

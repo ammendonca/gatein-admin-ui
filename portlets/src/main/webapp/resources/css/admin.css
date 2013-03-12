@@ -626,53 +626,53 @@ td.styles-hidden,
 .form-actions .btn-primary {margin-left: 5px;}
 
 
-/* Page Mobile Redirects */
+/* Page Site Redirects */
 
 .form-horizontal .onoffswitch-checkbox {display: none;}
 
-.table-striped tbody tr.form-mobile-redirect > td {
+.table-striped tbody tr.form-site-redirect > td {
 	background: #fff;
 	border-top: 1px solid #fff;
 	padding: 0;
 }
 
-.form-mobile-redirect form {
+.form-site-redirect form {
 	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 40px;
 }
 
-.header-mobile-redirect {
+.header-site-redirect {
 	background-color: #f6f6f6;
 	padding: 15px 10px;
 	border-bottom: 1px solid #fff;
 }
 
-.header-mobile-redirect legend + div {margin-top: 3px;}
+.header-site-redirect legend + div {margin-top: 3px;}
 
-.header-mobile-redirect > div {
+.header-site-redirect > div {
 	margin: 0;
 	float: left;
 }
 
-.form-mobile-redirect .header-mobile-redirect .control-group,
-.form-mobile-redirect .header-mobile-redirect .control-group:last-child {
+.form-site-redirect .header-site-redirect .control-group,
+.form-site-redirect .header-site-redirect .control-group:last-child {
 	width: 200px; /* was 260 */
 	margin-left: 35px;
 	margin-bottom: 0;
 }
 
-.header-mobile-redirect .control-label {width: auto;}
+.header-site-redirect .control-label {width: auto;}
 
-.header-mobile-redirect .control-group label {
+.header-site-redirect .control-group label {
 	font-weight: bold;
 	width: auto;
 	display: inline-block;
 	margin-right: 10px;
 }
 
-.header-mobile-redirect input,
-.header-mobile-redirect select {width: 145px;}
+.header-site-redirect input,
+.header-site-redirect select {width: 145px;}
 
 a.inside-table, button.inside-table {float: right;}
 
@@ -694,12 +694,12 @@ a.inside-table, button.inside-table {float: right;}
 
 table.action-small th {padding-top: 6px;}
 
-.form-mobile-redirect td.actions,
-.form-mobile-redirect th.actions {width: 50px;}
+.form-site-redirect td.actions,
+.form-site-redirect th.actions {width: 50px;}
 
-.form-mobile-redirect .control-group {margin-bottom: 14px;}
+.form-site-redirect .control-group {margin-bottom: 14px;}
 
-.form-mobile-redirect .control-group:last-child {margin-bottom: 10px;}
+.form-site-redirect .control-group:last-child {margin-bottom: 10px;}
 
 
 tbody.sortable tr:hover {

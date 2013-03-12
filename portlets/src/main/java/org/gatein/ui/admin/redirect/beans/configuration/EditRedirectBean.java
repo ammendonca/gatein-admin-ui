@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.admin.mobile.beans.configuration;
+package org.gatein.ui.admin.redirect.beans.configuration;
 
 import java.io.Serializable;
 import java.util.ArrayList;

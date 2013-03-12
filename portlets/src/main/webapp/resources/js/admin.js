@@ -130,6 +130,17 @@ function deleteMappingEntry(elem) {
 	return false;
 }
 
+function validateCondition() {
+	conditionName = $("input[id$='condition_name']").val();
+	if(!conditionName) {
+		$("input[id$='condition_name']").attr("disabled", "disabled");
+	}
+	else {
+		$("input[id$='condition_name']").removeAttr("disabled");
+	}
+
+}
+
 // $("body").on("click", "a.delete-node-mapping", function() {
 // 	$(this).tooltip("hide");
 // 	parentTR = $(this).parent("td").parent("tr");

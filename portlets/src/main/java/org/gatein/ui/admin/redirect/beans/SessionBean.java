@@ -1,4 +1,4 @@
-package org.gatein.admin.mobile.beans;
+package org.gatein.ui.admin.redirect.beans;
 
 import java.io.Serializable;
 

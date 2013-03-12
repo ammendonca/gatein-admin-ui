@@ -12,10 +12,10 @@
    <packaging>pom</packaging>
 
    <groupId>org.gatein.ui</groupId>
-   <artifactId>gatein-mobile-admin-ui-parent</artifactId>
+   <artifactId>gatein-redirect-admin-ui-parent</artifactId>
    <version>1.0.0-SNAPSHOT</version>
 
-   <name>GateIn Mobile Admin UI Parent</name>
+   <name>GateIn Redirect Admin UI Parent</name>
 
    <properties>
       <version.portlet-bridge>3.2.0.Beta1</version.portlet-bridge>
